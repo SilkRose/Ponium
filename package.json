@@ -1,0 +1,26 @@
+{
+  "name": "ponium",
+  "version": "1.0.0",
+  "description": "Pony based text adventure game.",
+  "main": "mane.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SilkRose/Ponium.git"
+  },
+  "author": "Silk Rose",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SilkRose/Ponium/issues"
+  },
+  "homepage": "https://github.com/SilkRose/Ponium#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "zod": "^3.20.2"
+  }
+}
