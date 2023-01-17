@@ -15,5 +15,5 @@ const character_validator = z.object({
   inventory: z.array(z.tuple([z.string(), z.number()])),
 });
 
-let rarity = fs.readFileSync(path.resolve("./game_data/character/rarity.json"));
-console.log(character_validator.parse(JSON.parse(rarity.toString())));
+let rarity: Character = JSON.parse(fs.readFileSync(path.resolve("./game_data/character/rarity.json")).toString());
+console.log(character_validator.parse(rarity));
