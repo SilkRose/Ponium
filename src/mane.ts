@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { ZodNativeEnum } from "zod";
 import fs from "fs";
 import path from "path";
 import * as readline from "node:readline/promises";
@@ -54,19 +54,28 @@ const gender_validator = z.union([
   z.literal("Other"),
 ]);
 
+const traits = load_json_file("traits.json");
+const trait_validator = z.array(z.enum(traits));
+
+const items = load_json_file("items.json");
+const item_validator = z.array(z.object({
+  name: z.enum(items.map((i: { name: string; }) => i.name)),
+  value: z.number(),
+}));
+
 const character_validator = z.object({
   name: name_validator,
   species: species_validator,
   gender: gender_validator,
   age: age_validator,
-  traits: z.string().array(),
-  inventory: z.array(z.tuple([z.string(), z.number()])),
+  traits: trait_validator,
+  inventory: item_validator,
 });
 
 async function mane() {
   await create_character();
   let characters = load_characters();
-  console.log(characters["pinkie_pie"]);
+  console.log(characters);
 }
 
 async function create_character() {
@@ -74,7 +83,6 @@ async function create_character() {
   let age = await get_age();
   let species = await get_species();
   let gender = await get_gender();
-  console.log(name, age, species, gender);
 }
 
 async function get_name() {
@@ -195,6 +203,13 @@ function find_files_in_dir(startPath: string, filter: string) {
     }
   }
   return results;
+}
+
+function load_json_file(file: string) {
+  let filepath = path.resolve(`./game_data/${file}`);
+  let read_file = fs.readFileSync(filepath, { encoding: "utf-8" });
+  let json = JSON.parse(read_file);
+  return json
 }
 
 mane();

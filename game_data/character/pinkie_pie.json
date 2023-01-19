@@ -1,11 +1,20 @@
 {
-    "name": "Pinkie Pie",
-    "species": {
-        "race": "Pony",
-        "sub_race": "Earth Pony"
+  "name": "Pinkie Pie",
+  "species": {
+    "race": "Pony",
+    "sub_race": "Earth Pony"
+  },
+  "gender": "Female",
+  "age": 21,
+  "traits": ["Baker"],
+  "inventory": [
+    {
+      "name": "Cake",
+      "value": 100
     },
-    "gender": "Female",
-    "age": 21,
-    "traits": [ "baker" ],
-    "inventory": [ ["cake", 10], ["bit", 200 ] ]
- }
+    {
+      "name": "Bit",
+      "value": 1
+    }
+  ]
+}
