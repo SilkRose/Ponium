@@ -1,7 +1,9 @@
 {
     "name": "Pinkie Pie",
-    "race": "Pony",
-    "sub_race": "Earth Pony",
+    "species": {
+        "race": "Pony",
+        "sub_race": "Earth Pony"
+    },
     "gender": "Female",
     "age": 21,
     "traits": [ "baker" ],
