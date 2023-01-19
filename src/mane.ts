@@ -58,10 +58,12 @@ const traits = load_json_file("traits.json");
 const trait_validator = z.array(z.enum(traits));
 
 const items = load_json_file("items.json");
-const item_validator = z.array(z.object({
-  name: z.enum(items.map((i: { name: string; }) => i.name)),
-  value: z.number(),
-}));
+const item_validator = z.array(
+  z.object({
+    name: z.enum(items.map((i: { name: string }) => i.name)),
+    value: z.number(),
+  })
+);
 
 const character_validator = z.object({
   name: name_validator,
@@ -73,16 +75,21 @@ const character_validator = z.object({
 });
 
 async function mane() {
-  await create_character();
+  let player: Character = await create_character();
+  console.log(player);
   let characters = load_characters();
   console.log(characters);
 }
 
 async function create_character() {
-  let name = await get_name();
-  let age = await get_age();
-  let species = await get_species();
-  let gender = await get_gender();
+  return {
+    name: (await get_name()) as Name,
+    age: (await get_age()) as Age,
+    species: (await get_species()) as Species,
+    gender: (await get_gender()) as Gender,
+    traits: [],
+    inventory: [],
+  };
 }
 
 async function get_name() {
@@ -209,7 +216,7 @@ function load_json_file(file: string) {
   let filepath = path.resolve(`./game_data/${file}`);
   let read_file = fs.readFileSync(filepath, { encoding: "utf-8" });
   let json = JSON.parse(read_file);
-  return json
+  return json;
 }
 
 mane();
