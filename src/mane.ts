@@ -8,6 +8,7 @@ type Character = z.infer<typeof character_validator>;
 type Name = z.infer<typeof name_validator>;
 type Age = z.infer<typeof age_validator>;
 type Species = z.infer<typeof species_validator>;
+type Gender = z.infer<typeof gender_validator>;
 type NPC = Record<string, Character>;
 
 const name_validator = z.string().min(2).max(32);
@@ -31,11 +32,9 @@ const donkey_validator = z.object({
 const mule_validator = z.object({
   race: z.literal("Mule"),
 });
-
 const griffon_validator = z.object({
   race: z.literal("Griffon"),
 });
-
 const dragon_validator = z.object({
   race: z.literal("Dragon"),
 });
@@ -49,10 +48,16 @@ const species_validator = z.union([
   dragon_validator,
 ]);
 
+const gender_validator = z.union([
+  z.literal("Female"),
+  z.literal("Male"),
+  z.literal("Other"),
+]);
+
 const character_validator = z.object({
   name: name_validator,
   species: species_validator,
-  gender: z.string(),
+  gender: gender_validator,
   age: age_validator,
   traits: z.string().array(),
   inventory: z.array(z.tuple([z.string(), z.number()])),
@@ -68,16 +73,17 @@ async function create_character() {
   let name = await get_name();
   let age = await get_age();
   let species = await get_species();
-  console.log(name, age, species);
+  let gender = await get_gender();
+  console.log(name, age, species, gender);
 }
 
 async function get_name() {
-  let name: Name = await read_line("What is you're name?");
+  let name: Name = await read_line("What is your name?");
   let validated_name = name_validator.safeParse(name);
   if (validated_name.success) {
     return name;
   } else {
-    console.log("Please provilde a name between 2 and 32 characters.");
+    console.log("Please provide a name between 2 and 32 characters.");
     await get_name();
   }
 }
@@ -88,20 +94,20 @@ async function get_age() {
   if (validated_age.success) {
     return age;
   } else {
-    console.log("Please provilde an age between 18 and 99.");
+    console.log("Please provide an age between 18 and 99.");
     await get_age();
   }
 }
 
 async function get_species() {
   let race = await read_line(
-    "What species are you? (Pony, Kirin, Dragon, Donkey, Mule, Griffin) "
+    "What species are you? (Pony, Kirin, Dragon, Donkey, Mule, Griffin)"
   );
   race = capitalize_string(race);
   console.log(race);
   if (race === "Pony") {
     let sub_race = await read_line(
-      "What pony race are you? (Unicorn, Alicorn, Pegasus, Earth Pony) "
+      "What pony race are you? (Unicorn, Alicorn, Pegasus, Earth Pony)"
     );
     sub_race = capitalize_words(sub_race);
     let species = {
@@ -127,9 +133,21 @@ async function get_species() {
   }
 }
 
+async function get_gender() {
+  let gender = await read_line("What is your gender? (Female, Male, Other)");
+  gender = capitalize_words(gender);
+  let validated_gender = gender_validator.safeParse(gender);
+  if (validated_gender.success) {
+    return gender;
+  } else {
+    console.log("Please provide a gender from the list provided.");
+    await get_gender();
+  }
+}
+
 async function read_line(text: string) {
   const response = readline.createInterface({ input, output });
-  const answer = await response.question(`${text} `);
+  const answer = await response.question(`${text}: `);
   response.close();
   return answer.trim();
 }
