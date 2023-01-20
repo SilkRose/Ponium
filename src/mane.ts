@@ -1,6 +1,7 @@
-import z, { ZodNativeEnum } from "zod";
+import z from "zod";
 import fs from "fs";
 import path from "path";
+import * as rl from "readline";
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 
@@ -75,6 +76,7 @@ const character_validator = z.object({
 });
 
 async function mane() {
+  await get_best_pony();
   let player: Character = await create_character();
   console.log(player);
   let characters = load_characters();
@@ -119,7 +121,6 @@ async function get_species() {
     "What species are you? (Pony, Kirin, Dragon, Donkey, Mule, Griffin)"
   );
   race = capitalize_string(race);
-  console.log(race);
   if (race === "Pony") {
     let sub_race = await read_line(
       "What pony race are you? (Unicorn, Alicorn, Pegasus, Earth Pony)"
@@ -220,3 +221,37 @@ function load_json_file(file: string) {
 }
 
 mane();
+
+async function get_best_pony() {
+  const question = "Who is best Pony? :";
+  const answer = "Pinkie Pie";
+  rl.emitKeypressEvents(process.stdin);
+  if (process.stdin.isTTY) process.stdin.setRawMode(true);
+  process.stdin.write(question);
+  const forloop_end = answer.length + 1;
+  for (let i = 1; i < forloop_end; i++) {
+    await assert_best_pony(question, answer, i);
+  }
+  const question2 = `Please confirm that ${answer} is indeed best pony. :`;
+  const answer2 = "Yes!";
+  process.stdin.write("\n" + question2);
+  const forloop_end2 = answer2.length + 1;
+  for (let i = 1; i < forloop_end2; i++) {
+    await assert_best_pony(question2, answer2, i);
+  }
+  console.log();
+  process.stdin.setRawMode(false);
+}
+
+function assert_best_pony(question: string, answer: string, i: number) {
+  return new Promise<void>((res) => {
+    process.stdin.once("keypress", (chunk, key) => {
+      let text = question + answer.slice(0, i);
+      process.stdin.write("\r");
+      process.stdin.write("ESC[2K");
+      process.stdin.write("\r");
+      process.stdin.write(text);
+      res();
+    });
+  });
+}
