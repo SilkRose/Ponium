@@ -220,38 +220,43 @@ function load_json_file(file: string) {
   return json;
 }
 
-mane();
-
 async function get_best_pony() {
   const question = "Who is best Pony? :";
   const answer = "Pinkie Pie";
   rl.emitKeypressEvents(process.stdin);
   if (process.stdin.isTTY) process.stdin.setRawMode(true);
   process.stdin.write(question);
-  const forloop_end = answer.length + 1;
-  for (let i = 1; i < forloop_end; i++) {
-    await assert_best_pony(question, answer, i);
+  let i = 0;
+  while (i < answer.length) {
+    i = await assert_best_pony(question, answer, i);
   }
   const question2 = `Please confirm that ${answer} is indeed best pony. :`;
   const answer2 = "Yes!";
   process.stdin.write("\n" + question2);
-  const forloop_end2 = answer2.length + 1;
-  for (let i = 1; i < forloop_end2; i++) {
-    await assert_best_pony(question2, answer2, i);
+  i = 0;
+  while (i < answer2.length) {
+    i = await assert_best_pony(question2, answer2, i);
   }
   console.log();
   process.stdin.setRawMode(false);
 }
 
 function assert_best_pony(question: string, answer: string, i: number) {
-  return new Promise<void>((res) => {
-    process.stdin.once("keypress", (chunk, key) => {
-      let text = question + answer.slice(0, i);
-      process.stdin.write("\r");
-      process.stdin.write("ESC[2K");
-      process.stdin.write("\r");
-      process.stdin.write(text);
-      res();
+  return new Promise<number>((res) => {
+    process.stdin.once("keypress", (_, key) => {
+      //if (key && key.name == "q") process.exit();
+      let rv;
+      if (key.name === "backspace" || key.name === "delete") rv = i - 1;
+      else rv = i + 1;
+      if (rv < 0) rv = 0;
+      let text = question + answer.slice(0, rv);
+      process.stdout.write("\r");
+      process.stdout.write(" ".repeat(process.stdout.columns));
+      process.stdout.write("\r");
+      process.stdout.write(text);
+      res(rv);
     });
   });
 }
+
+mane();
