@@ -52,6 +52,9 @@ const species_validator = z.union([
 const gender_validator = z.union([
   z.literal("Female"),
   z.literal("Male"),
+  z.literal("Gender Fluid"),
+  z.literal("Non-Binary"),
+  z.literal("Agender"),
   z.literal("Other"),
 ]);
 
@@ -150,7 +153,7 @@ async function get_species() {
 }
 
 async function get_gender() {
-  let gender = await read_line("What is your gender? (Female, Male, Other)");
+  let gender = await read_line("What is your gender? (Female, Male, Gender Fluid, Non-Binary, Agender, Other)");
   gender = capitalize_words(gender);
   let validated_gender = gender_validator.safeParse(gender);
   if (validated_gender.success) {
