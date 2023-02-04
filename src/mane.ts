@@ -153,7 +153,9 @@ async function get_species() {
 }
 
 async function get_gender() {
-  let gender = await read_line("What is your gender? (Female, Male, Gender Fluid, Non-Binary, Agender, Other)");
+  let gender = await read_line(
+    "What is your gender? (Female, Male, Gender Fluid, Non-Binary, Agender, Other)"
+  );
   gender = capitalize_words(gender);
   let validated_gender = gender_validator.safeParse(gender);
   if (validated_gender.success) {
