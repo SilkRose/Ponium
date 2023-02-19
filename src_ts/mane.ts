@@ -1,85 +1,27 @@
-import z from "zod";
-import fs from "fs";
-import path from "path";
-import * as rl from "readline";
-import * as readline from "node:readline/promises";
-import { stdin as input, stdout as output } from "node:process";
+import * as characters from "./game_data/character/characters.js";
+import { traits } from "./game_data/traits";
+import { items } from "./game_data/items";
 
-type Character = z.infer<typeof character_validator>;
-type Name = z.infer<typeof name_validator>;
-type Age = z.infer<typeof age_validator>;
-type Species = z.infer<typeof species_validator>;
-type Gender = z.infer<typeof gender_validator>;
+type Name = ""
+type Age = ""
+type Species = ""
+type Gender = ""
 type NPC = Record<string, Character>;
 
-const name_validator = z.string().min(2).max(32);
-const age_validator = z.number().min(18).max(99);
+type Character = {
+  name: Name,
+  age: Age,
+  species: Species,
+  gender: Gender,
+  traits: "",
+  items: ""
+}
 
-const pony_validator = z.object({
-  race: z.literal("Pony"),
-  sub_race: z.union([
-    z.literal("Alicorn"),
-    z.literal("Unicorn"),
-    z.literal("Pegasus"),
-    z.literal("Earth Pony"),
-  ]),
-});
-const kirin_validator = z.object({
-  race: z.literal("Kirin"),
-});
-const donkey_validator = z.object({
-  race: z.literal("Donkey"),
-});
-const mule_validator = z.object({
-  race: z.literal("Mule"),
-});
-const griffon_validator = z.object({
-  race: z.literal("Griffon"),
-});
-const dragon_validator = z.object({
-  race: z.literal("Dragon"),
-});
+window.onload = mane;
 
-const species_validator = z.union([
-  pony_validator,
-  kirin_validator,
-  donkey_validator,
-  mule_validator,
-  griffon_validator,
-  dragon_validator,
-]);
-
-const gender_validator = z.union([
-  z.literal("Female"),
-  z.literal("Male"),
-  z.literal("Gender Fluid"),
-  z.literal("Non-Binary"),
-  z.literal("Agender"),
-  z.literal("Other"),
-]);
-
-const traits = load_json_file("traits.json");
-const trait_validator = z.array(z.enum(traits));
-
-const items = load_json_file("items.json");
-const item_validator = z.array(
-  z.object({
-    name: z.enum(items.map((i: { name: string }) => i.name)),
-    value: z.number(),
-  })
-);
-
-const character_validator = z.object({
-  name: name_validator,
-  species: species_validator,
-  gender: gender_validator,
-  age: age_validator,
-  traits: trait_validator,
-  inventory: item_validator,
-});
-
-async function mane() {
+function mane() {
   console.log("test");
+  console.log(characters.pinkie_pie);
   setInterval(addRandomText, 200);
 }
 
@@ -95,6 +37,7 @@ function addRandomText() {
   window.scrollBy(100, 100);
 }
 
+/* 
 async function create_character() {
   return {
     name: (await get_name()) as Name,
@@ -272,5 +215,4 @@ function assert_best_pony(question: string, answer: string, i: number) {
     });
   });
 }
-
-mane();
+ */

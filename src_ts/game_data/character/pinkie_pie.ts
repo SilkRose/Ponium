@@ -1,4 +1,4 @@
-{
+export let pinkie_pie = {
   "name": "Pinkie Pie",
   "species": {
     "race": "Pony",

@@ -1,4 +1,4 @@
-[
+export const items = [
     {
         "name": "Hat",
         "value": 10

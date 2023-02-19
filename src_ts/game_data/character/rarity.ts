@@ -1,4 +1,4 @@
-{
+export let rarity = {
   "name": "Rarity",
   "species": {
     "race": "Pony",
