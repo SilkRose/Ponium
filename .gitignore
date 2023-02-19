@@ -1,4 +1,2 @@
 /dist
 /node_modules
-/obsidian_vault/.obsidian/**
-!/obsidian_vault/.obsidian/app.json
