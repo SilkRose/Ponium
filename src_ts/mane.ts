@@ -79,11 +79,20 @@ const character_validator = z.object({
 });
 
 async function mane() {
-  await get_best_pony();
-  let player: Character = await create_character();
-  console.log(player);
-  let characters = load_characters();
-  console.log(characters);
+  console.log("test");
+  setInterval(addRandomText, 200);
+}
+
+function addRandomText() {
+  const newP1 = document.createElement("p");
+
+  const randomNum = Math.floor(Math.random() * 100) + 1;
+
+  newP1.innerHTML = "Random Number: " + randomNum;
+
+  const gameContent = document.getElementById("game_content")!;
+  gameContent.appendChild(newP1);
+  window.scrollBy(100, 100);
 }
 
 async function create_character() {
