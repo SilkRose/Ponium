@@ -1,6 +1,6 @@
 import * as characters from "./game_data/character/characters.js";
-import { traits } from "./game_data/traits";
-import { items } from "./game_data/items";
+import { traits } from "./game_data/traits.js";
+import { items } from "./game_data/items.js";
 
 type Name = ""
 type Age = ""
