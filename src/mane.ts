@@ -2,19 +2,19 @@ import * as characters from "./game_data/character/characters.js";
 import { traits } from "./game_data/traits.js";
 import { items } from "./game_data/items.js";
 
+type Name = String;
+
 window.onload = mane;
 
 async function mane() {
   const test_data = characters.pinkie_pie;
   append_element(JSON.stringify(test_data));
-  let test1 = await read_line();
-  append_element(JSON.stringify(test_data));
-  let test2 = await read_line();
-  console.log(test1, test2);
+  let player = await create_character();
+  append_element(player.name);
 }
 
 function append_element(element: String) {
-  const new_element = document.createElement("span");
+  const new_element = document.createElement("p");
   new_element.innerHTML = `${element}`;
   const game_content = document.getElementById("game_content")!;
   game_content.appendChild(new_element);
@@ -33,8 +33,8 @@ async function read_line(): Promise<String> {
     get_promise_from_input_event(input, "keydown", "Enter"),
     get_promise_from_button_event(button, "click"),
   ]);
-  console.log("promise awaited!");
-  return input.value;
+  game_content.removeChild(game_content.lastChild!);
+  return input.value.trim();
 }
 
 function get_promise_from_input_event(
@@ -77,29 +77,37 @@ function capitalize_words(string: string) {
   return arr.join(" ");
 }
 
-/* 
 async function create_character() {
   return {
-    name: (await get_name()) as Name,
-    age: (await get_age()) as Age,
-    species: (await get_species()) as Species,
-    gender: (await get_gender()) as Gender,
+    name: await get_name() as Name,
+    age: "",
+    species: "",
+    gender: "",
     traits: [],
     inventory: [],
   };
 }
 
-async function get_name() {
-  let name: Name = await read_line("What is your name?");
-  let validated_name = name_validator.safeParse(name);
-  if (validated_name.success) {
+async function get_name(): Promise<Name> {
+  append_element("What is your name?");
+  let name = await read_line();
+  if (name_validator(name)) {
     return name;
   } else {
-    console.log("Please provide a name between 2 and 32 characters.");
-    await get_name();
+    append_element("Please provide a name between 2 and 32 characters.");
+    return await get_name();
   }
 }
 
+function name_validator(name: String) {
+  if (name.length >= 2 && name.length <= 32) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/* 
 async function get_age() {
   let age: Age = parseInt(await read_line("How old are you?"));
   let validated_age = age_validator.safeParse(age);
