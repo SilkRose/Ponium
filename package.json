@@ -1,21 +1,21 @@
 {
-  "name": "ponium",
+  "name": "librepony",
   "version": "1.0.0",
-  "description": "Pony based text adventure game.",
+  "description": "Get your free pony today!",
   "main": "mane.js",
   "scripts": {
     "build": "./build.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SilkRose/Ponium.git"
+    "url": "git+https://github.com/SilkRose/LibrePony.git"
   },
   "author": "Silk Rose",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SilkRose/Ponium/issues"
+    "url": "https://github.com/SilkRose/LibrePony/issues"
   },
-  "homepage": "https://github.com/SilkRose/Ponium#readme",
+  "homepage": "https://github.com/SilkRose/LibrePony#readme",
   "devDependencies": {
     "typescript": "^4.9.5"
   }

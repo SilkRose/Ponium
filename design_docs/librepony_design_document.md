@@ -1,6 +1,6 @@
-# Ponium
+# LibrePony
 
-Ponium is a text adventure game written in TypeScript, about living in Ponyville.
+LibrePony is a text adventure game written in TypeScript, about living in Ponyville.
 
 Here are some general notes:
 - each character has there own folder, and in that folder contains ts files for everything related to them.
