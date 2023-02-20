@@ -20,20 +20,15 @@ type Character = {
 window.onload = mane;
 
 function mane() {
-  console.log("test");
-  console.log(characters.pinkie_pie);
-  setInterval(addRandomText, 200);
+  const test_data = characters.pinkie_pie;
+  append_element(JSON.stringify(test_data));
 }
 
-function addRandomText() {
-  const newP1 = document.createElement("p");
-
-  const randomNum = Math.floor(Math.random() * 100) + 1;
-
-  newP1.innerHTML = "Random Number: " + randomNum;
-
-  const gameContent = document.getElementById("game_content")!;
-  gameContent.appendChild(newP1);
+function append_element(element: String) {
+  const new_element = document.createElement("span");
+  new_element.innerHTML = `${element}`;
+  const game_content = document.getElementById("game_content")!;
+  game_content.appendChild(new_element);
   window.scrollBy(100, 100);
 }
 
