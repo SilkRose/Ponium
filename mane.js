@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as characters from "./game_data/character/characters.js";
+const pony = "Pony";
+const nonpony_species = ["Kirin", "Dragon", "Donkey", "Mule", "Griffin"];
+const pony_sub_races = ["Alicorn", "Unicorn", "Pegasus", "Earth Pony"];
 window.onload = mane;
 function mane() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -16,6 +19,10 @@ function mane() {
         let player = yield create_character();
         append_element(player.name);
         append_element(player.age.toString());
+        append_element(player.species.race.toString());
+        if (player.species.race === "Pony") {
+            append_element(player.species.sub_race.toString());
+        }
     });
 }
 function append_element(element) {
@@ -28,7 +35,7 @@ function append_element(element) {
 function read_line() {
     return __awaiter(this, void 0, void 0, function* () {
         const new_element = document.createElement("p");
-        new_element.innerHTML = `<input type="text" id="input" name="first_name"><button id="submit">Enter</button>`;
+        new_element.innerHTML = `<input type="text" id="input" autofocus><button id="submit">Enter</button>`;
         const game_content = document.getElementById("game_content");
         game_content.appendChild(new_element);
         window.scrollBy(100, 100);
@@ -79,7 +86,7 @@ function create_character() {
         return {
             name: yield get_name(),
             age: yield get_age(),
-            species: "",
+            species: yield get_species(),
             gender: "",
             traits: [],
             inventory: [],
@@ -128,40 +135,39 @@ function age_validator(age) {
         return false;
     }
 }
-/*
-async function get_species() {
-  let race = await read_line(
-    "What species are you? (Pony, Kirin, Dragon, Donkey, Mule, Griffin)"
-  );
-  race = capitalize_string(race);
-  if (race === "Pony") {
-    let sub_race = await read_line(
-      "What pony race are you? (Unicorn, Alicorn, Pegasus, Earth Pony)"
-    );
-    sub_race = capitalize_words(sub_race);
-    let species = {
-      race: race,
-      sub_race: sub_race,
-    };
-    let species_validated = species_validator.safeParse(species);
-    if (species_validated.success) {
-      return species;
-    } else {
-      console.log("Please enter a valid race and sub race.");
-      await get_species();
-    }
-  } else {
-    let species = { race: race };
-    let species_validated = species_validator.safeParse(species);
-    if (species_validated.success) {
-      return species;
-    } else {
-      console.log("Please enter a valid race.");
-      await get_species();
-    }
-  }
+function get_species() {
+    return __awaiter(this, void 0, void 0, function* () {
+        append_element(`What species are you? (${pony}, ${nonpony_species.join(", ")})`);
+        let race = yield read_line();
+        race = capitalize_string(race);
+        if (race === pony) {
+            append_element(`What pony race are you? (${pony_sub_races.join(", ")})`);
+            let sub_race = yield read_line();
+            sub_race = capitalize_words(sub_race);
+            if (pony_sub_races.indexOf(sub_race) !== -1) {
+                append_element(pony_sub_races.indexOf(sub_race).toString());
+                return {
+                    race: race,
+                    sub_race: sub_race,
+                };
+            }
+            else {
+                append_element("Please enter a valid sub race.");
+                return yield get_species();
+            }
+        }
+        else {
+            if (nonpony_species.indexOf(race) !== -1) {
+                return { race: race };
+            }
+            else {
+                append_element("Please enter a valid sub race.");
+                return yield get_species();
+            }
+        }
+    });
 }
-
+/*
 async function get_gender() {
   let gender = await read_line(
     "What is your gender? (Female, Male, Gender Fluid, Non-Binary, Agender, Other)"
