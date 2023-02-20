@@ -37,3 +37,75 @@ main {
   box-shadow: 0px 0px 10px #ccc;
   background-color: #fff;
 }
+
+#input_field {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#input_field input {
+  flex-grow: 1;
+  background-color: #f2f2f2;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-color: #a5a5a5;
+  padding: 0.5rem;
+}
+
+#input_field input:focus {
+  outline: none;
+  border-color: #eb458b;
+}
+
+#input_field button {
+  border-color: #a5a5a5;
+  border-style: solid;
+  border-radius: 0;
+
+  padding: 0.5rem;
+}
+
+#input_field button:hover,
+#input_field button:focus {
+  outline: none;
+  border-color: #eb458b;
+}
+
+::-webkit-input-placeholder {
+  /* WebKit, Blink, Edge */
+  color: rgb(85, 85, 85);
+  font-style: italic;
+}
+
+:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: rgb(85, 85, 85);
+  font-style: italic;
+  opacity: 1;
+}
+
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: rgb(85, 85, 85);
+  font-style: italic;
+  opacity: 1;
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: rgb(85, 85, 85);
+  font-style: italic;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: rgb(85, 85, 85);
+  font-style: italic;
+}
+
+::placeholder {
+  /* Most modern browsers support this now. */
+  color: rgb(85, 85, 85);
+  font-style: italic;
+}
