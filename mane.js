@@ -35,12 +35,13 @@ function append_element(element) {
 function read_line() {
     return __awaiter(this, void 0, void 0, function* () {
         const new_element = document.createElement("p");
-        new_element.innerHTML = `<input type="text" id="input" autofocus><button id="submit">Enter</button>`;
+        new_element.innerHTML = `<input type="text" id="input"><button id="submit">Enter</button>`;
         const game_content = document.getElementById("game_content");
         game_content.appendChild(new_element);
         window.scrollBy(100, 100);
         const input = document.getElementById("input");
         const button = document.getElementById("submit");
+        input.focus();
         yield Promise.race([
             get_promise_from_input_event(input, "keydown", "Enter"),
             get_promise_from_button_event(button, "click"),
@@ -145,7 +146,6 @@ function get_species() {
             let sub_race = yield read_line();
             sub_race = capitalize_words(sub_race);
             if (pony_sub_races.indexOf(sub_race) !== -1) {
-                append_element(pony_sub_races.indexOf(sub_race).toString());
                 return {
                     race: race,
                     sub_race: sub_race,
