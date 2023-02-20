@@ -2,26 +2,14 @@ import * as characters from "./game_data/character/characters.js";
 import { traits } from "./game_data/traits.js";
 import { items } from "./game_data/items.js";
 
-type Name = ""
-type Age = ""
-type Species = ""
-type Gender = ""
-type NPC = Record<string, Character>;
-
-type Character = {
-  name: Name,
-  age: Age,
-  species: Species,
-  gender: Gender,
-  traits: "",
-  items: ""
-}
-
 window.onload = mane;
 
-function mane() {
+async function mane() {
   const test_data = characters.pinkie_pie;
   append_element(JSON.stringify(test_data));
+  await read_line();
+  append_element(JSON.stringify(test_data));
+  await read_line();
 }
 
 function append_element(element: String) {
@@ -30,6 +18,36 @@ function append_element(element: String) {
   const game_content = document.getElementById("game_content")!;
   game_content.appendChild(new_element);
   window.scrollBy(100, 100);
+}
+
+async function read_line(): String {
+  const new_element = document.createElement("p");
+  new_element.innerHTML = `<input type="text" id="input" name="first_name"><button id="submit">Enter</button>`;
+  const game_content = document.getElementById("game_content")!;
+  game_content.appendChild(new_element);
+  window.scrollBy(100, 100);
+  const input = document.getElementById("input") as HTMLInputElement;
+  const button = document.getElementById("submit") as HTMLButtonElement;
+  input.onkeydown = function (key) {
+    if (key.key === "Enter") {
+      return input.value.toString();
+    }
+  };
+  button.onclick = function () {
+    return input.value.toString();
+  };
+}
+
+function capitalize_string(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
+function capitalize_words(string: string) {
+  const arr = string.toLowerCase().split(" ");
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+  }
+  return arr.join(" ");
 }
 
 /* 
@@ -111,65 +129,6 @@ async function get_gender() {
     console.log("Please provide a gender from the list provided.");
     await get_gender();
   }
-}
-
-async function read_line(text: string) {
-  const response = readline.createInterface({ input, output });
-  const answer = await response.question(`${text}: `);
-  response.close();
-  return answer.trim();
-}
-
-function capitalize_string(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
-
-function capitalize_words(string: string) {
-  const arr = string.toLowerCase().split(" ");
-  for (var i = 0; i < arr.length; i++) {
-    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
-  }
-  return arr.join(" ");
-}
-
-function load_characters() {
-  let character_files = find_files_in_dir(
-    path.resolve("./game_data/character/"),
-    ".json"
-  );
-  let characters_: NPC = {};
-  for (let file of character_files) {
-    let name = file.split("/").pop()?.split(".")[0];
-    let read_file = fs.readFileSync(file, { encoding: "utf-8" });
-    let json = JSON.parse(read_file);
-    let validated_json = character_validator.parse(json);
-    characters_[`${name}`] = validated_json;
-  }
-  return characters_;
-}
-
-function find_files_in_dir(startPath: string, filter: string) {
-  let results: string[] = [];
-  if (!fs.existsSync(startPath)) {
-    console.log("no dir ", startPath);
-    throw Error;
-  }
-  let files = fs.readdirSync(startPath);
-  for (let i = 0; i < files.length; i++) {
-    let filename = path.join(startPath, files[i]);
-    let stat = fs.lstatSync(filename);
-    if (stat.isFile() && filename.indexOf(filter) >= 0) {
-      results.push(filename);
-    }
-  }
-  return results;
-}
-
-function load_json_file(file: string) {
-  let filepath = path.resolve(`./game_data/${file}`);
-  let read_file = fs.readFileSync(filepath, { encoding: "utf-8" });
-  let json = JSON.parse(read_file);
-  return json;
 }
 
 async function get_best_pony() {
