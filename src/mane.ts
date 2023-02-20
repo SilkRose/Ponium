@@ -50,7 +50,7 @@ function append_element(element: string) {
 
 async function read_line(): Promise<string> {
   const new_element = document.createElement("p");
-  new_element.innerHTML = `<input type="text" id="input"><button id="submit">Enter</button>`;
+  new_element.innerHTML = `<div id="input_field"><input type="text" id="input" placeholder="Enter response..."><button id="submit">Enter</button></div>`;
   const game_content = document.getElementById("game_content")!;
   game_content.appendChild(new_element);
   window.scrollBy(100, 100);
