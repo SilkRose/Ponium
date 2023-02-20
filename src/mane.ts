@@ -7,9 +7,10 @@ window.onload = mane;
 async function mane() {
   const test_data = characters.pinkie_pie;
   append_element(JSON.stringify(test_data));
-  await read_line();
+  let test1 = await read_line();
   append_element(JSON.stringify(test_data));
-  await read_line();
+  let test2 = await read_line();
+  console.log(test1, test2);
 }
 
 function append_element(element: String) {
@@ -20,7 +21,7 @@ function append_element(element: String) {
   window.scrollBy(100, 100);
 }
 
-async function read_line(): String {
+async function read_line(): Promise<String> {
   const new_element = document.createElement("p");
   new_element.innerHTML = `<input type="text" id="input" name="first_name"><button id="submit">Enter</button>`;
   const game_content = document.getElementById("game_content")!;
@@ -28,14 +29,40 @@ async function read_line(): String {
   window.scrollBy(100, 100);
   const input = document.getElementById("input") as HTMLInputElement;
   const button = document.getElementById("submit") as HTMLButtonElement;
-  input.onkeydown = function (key) {
-    if (key.key === "Enter") {
-      return input.value.toString();
-    }
-  };
-  button.onclick = function () {
-    return input.value.toString();
-  };
+  await Promise.race([
+    get_promise_from_input_event(input, "keydown", "Enter"),
+    get_promise_from_button_event(button, "click"),
+  ]);
+  console.log("promise awaited!");
+  return input.value;
+}
+
+function get_promise_from_input_event(
+  item: HTMLInputElement,
+  event: string,
+  required_key: string
+) {
+  return new Promise<void>((resolve) => {
+    const listener = () => {
+      item.onkeydown = function (key) {
+        if (key.key === required_key) {
+          item.removeEventListener(event, listener);
+          resolve();
+        }
+      };
+    };
+    item.addEventListener(event, listener);
+  });
+}
+
+function get_promise_from_button_event(item: HTMLButtonElement, event: string) {
+  return new Promise<void>((resolve) => {
+    const listener = () => {
+      item.removeEventListener(event, listener);
+      resolve();
+    };
+    item.addEventListener(event, listener);
+  });
 }
 
 function capitalize_string(string: string) {
