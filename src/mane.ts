@@ -2,8 +2,6 @@ import * as characters from "./game_data/character/characters.js";
 import { traits } from "./game_data/traits.js";
 import { items } from "./game_data/items.js";
 
-type Name = String;
-
 window.onload = mane;
 
 async function mane() {
@@ -11,9 +9,10 @@ async function mane() {
   append_element(JSON.stringify(test_data));
   let player = await create_character();
   append_element(player.name);
+  append_element(player.age.toString());
 }
 
-function append_element(element: String) {
+function append_element(element: string) {
   const new_element = document.createElement("p");
   new_element.innerHTML = `${element}`;
   const game_content = document.getElementById("game_content")!;
@@ -21,7 +20,7 @@ function append_element(element: String) {
   window.scrollBy(100, 100);
 }
 
-async function read_line(): Promise<String> {
+async function read_line(): Promise<string> {
   const new_element = document.createElement("p");
   new_element.innerHTML = `<input type="text" id="input" name="first_name"><button id="submit">Enter</button>`;
   const game_content = document.getElementById("game_content")!;
@@ -79,8 +78,8 @@ function capitalize_words(string: string) {
 
 async function create_character() {
   return {
-    name: await get_name() as Name,
-    age: "",
+    name: await get_name(),
+    age: await get_age(),
     species: "",
     gender: "",
     traits: [],
@@ -88,7 +87,7 @@ async function create_character() {
   };
 }
 
-async function get_name(): Promise<Name> {
+async function get_name(): Promise<string> {
   append_element("What is your name?");
   let name = await read_line();
   if (name_validator(name)) {
@@ -99,7 +98,7 @@ async function get_name(): Promise<Name> {
   }
 }
 
-function name_validator(name: String) {
+function name_validator(name: string) {
   if (name.length >= 2 && name.length <= 32) {
     return true;
   } else {
@@ -107,18 +106,26 @@ function name_validator(name: String) {
   }
 }
 
-/* 
-async function get_age() {
-  let age: Age = parseInt(await read_line("How old are you?"));
-  let validated_age = age_validator.safeParse(age);
-  if (validated_age.success) {
+async function get_age(): Promise<number> {
+  append_element("How old are you?");
+  let age = parseInt(await read_line());
+  if (age_validator(age)) {
     return age;
   } else {
     console.log("Please provide an age between 18 and 99.");
-    await get_age();
+    return await get_age();
   }
 }
 
+function age_validator(age: number) {
+  if (age >= 18 && age <= 100) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/*
 async function get_species() {
   let race = await read_line(
     "What species are you? (Pony, Kirin, Dragon, Donkey, Mule, Griffin)"
