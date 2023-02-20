@@ -50,12 +50,13 @@ function append_element(element: string) {
 
 async function read_line(): Promise<string> {
   const new_element = document.createElement("p");
-  new_element.innerHTML = `<input type="text" id="input" autofocus><button id="submit">Enter</button>`;
+  new_element.innerHTML = `<input type="text" id="input"><button id="submit">Enter</button>`;
   const game_content = document.getElementById("game_content")!;
   game_content.appendChild(new_element);
   window.scrollBy(100, 100);
   const input = document.getElementById("input") as HTMLInputElement;
   const button = document.getElementById("submit") as HTMLButtonElement;
+  input.focus();
   await Promise.race([
     get_promise_from_input_event(input, "keydown", "Enter"),
     get_promise_from_button_event(button, "click"),
@@ -164,7 +165,6 @@ async function get_species(): Promise<Species> {
     let sub_race = await read_line();
     sub_race = capitalize_words(sub_race);
     if (pony_sub_races.indexOf(sub_race) !== -1) {
-      append_element(pony_sub_races.indexOf(sub_race).toString());
       return {
         race: race,
         sub_race: sub_race,
