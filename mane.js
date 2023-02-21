@@ -9,7 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import * as characters from "./game_data/character/characters.js";
 const pony = "Pony";
-const nonpony_species = ["Kirin", "Dragon", "Donkey", "Mule", "Griffin"];
+const nonpony_species = [
+    "Kirin",
+    "Dragon",
+    "Donkey",
+    "Mule",
+    "Griffin",
+];
 const pony_sub_races = ["Alicorn", "Unicorn", "Pegasus", "Earth Pony"];
 const genders = [
     "Female",
@@ -94,9 +100,14 @@ function read_line_radial(options) {
             get_promise_from_radial_event(input, "keydown", "Enter"),
             get_promise_from_button_event(button, "click"),
         ]);
-        const checked = Array.from(input).filter((radial) => radial.checked);
+        const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
         game_content.removeChild(game_content.lastChild);
-        return checked[0].value;
+        if (options.indexOf(checked) !== -1) {
+            return checked;
+        }
+        else {
+            return yield read_line_radial(options);
+        }
     });
 }
 function get_promise_from_input_event(item, event, required_key) {
@@ -190,26 +201,13 @@ function get_species() {
         let race = yield read_line_radial([pony, ...nonpony_species]);
         if (race === pony) {
             append_element(`What pony race are you?`);
-            let sub_race = yield read_line_radial(pony_sub_races);
-            if (pony_sub_races.indexOf(sub_race) !== -1) {
-                return {
-                    race: race,
-                    sub_race: sub_race,
-                };
-            }
-            else {
-                append_element("Please enter a valid sub race.");
-                return yield get_species();
-            }
+            return {
+                race: race,
+                sub_race: yield read_line_radial(pony_sub_races),
+            };
         }
         else {
-            if (nonpony_species.indexOf(race) !== -1) {
-                return { race: race };
-            }
-            else {
-                append_element("Please enter a valid sub race.");
-                return yield get_species();
-            }
+            return { race: race };
         }
     });
 }
@@ -217,13 +215,7 @@ function get_gender() {
     return __awaiter(this, void 0, void 0, function* () {
         append_element("What is your gender?");
         let gender = yield read_line_radial(genders);
-        if (genders.indexOf(gender) !== -1) {
-            return gender;
-        }
-        else {
-            append_element("Please provide a gender from the list provided.");
-            return yield get_gender();
-        }
+        return gender;
     });
 }
 /*
