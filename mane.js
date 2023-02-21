@@ -30,7 +30,7 @@ function append_element(element) {
     new_element.innerHTML = `${element}`;
     const game_content = document.getElementById("game_content");
     game_content.appendChild(new_element);
-    window.scrollBy(100, 100);
+    new_element.scrollIntoView();
 }
 function read_line() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -38,7 +38,7 @@ function read_line() {
         new_element.innerHTML = `<div id="input_field"><input type="text" id="input" placeholder="Enter response..."><button id="submit">Enter</button></div>`;
         const game_content = document.getElementById("game_content");
         game_content.appendChild(new_element);
-        window.scrollBy(100, 100);
+        new_element.scrollIntoView();
         const input = document.getElementById("input");
         const button = document.getElementById("submit");
         input.focus();
