@@ -211,7 +211,7 @@ async function get_age(): Promise<number> {
   if (age >= 18 && age <= 100) {
     return age;
   } else {
-    console.log("Please provide an age between 18 and 99.");
+    append_element("Please provide an age between 18 and 99.");
     return await get_age();
   }
 }
@@ -247,7 +247,7 @@ async function get_gender(): Promise<Gender> {
   if (genders.indexOf(gender) !== -1) {
     return gender as Gender;
   } else {
-    console.log("Please provide a gender from the list provided.");
+    append_element("Please provide a gender from the list provided.");
     return await get_gender();
   }
 }
