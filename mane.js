@@ -11,6 +11,14 @@ import * as characters from "./game_data/character/characters.js";
 const pony = "Pony";
 const nonpony_species = ["Kirin", "Dragon", "Donkey", "Mule", "Griffin"];
 const pony_sub_races = ["Alicorn", "Unicorn", "Pegasus", "Earth Pony"];
+const genders = [
+    "Female",
+    "Male",
+    "Gender Fluid",
+    "Non-Binary",
+    "Agender",
+    "Other",
+];
 window.onload = mane;
 function mane() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -23,6 +31,7 @@ function mane() {
         if (player.species.race === "Pony") {
             append_element(player.species.sub_race.toString());
         }
+        append_element(player.gender);
     });
 }
 function append_element(element) {
@@ -35,7 +44,11 @@ function append_element(element) {
 function read_line_text() {
     return __awaiter(this, void 0, void 0, function* () {
         const new_element = document.createElement("p");
-        new_element.innerHTML = `<div id="input_field"><input type="text" id="input" placeholder="Enter response..."><button id="submit">Enter</button></div>`;
+        new_element.innerHTML = `
+  <div id="input_field">
+    <input type="text" id="input" placeholder="Enter response...">
+    <button id="submit">Enter</button>
+  </div>`;
         const game_content = document.getElementById("game_content");
         game_content.appendChild(new_element);
         new_element.scrollIntoView();
@@ -81,7 +94,7 @@ function read_line_radial(options) {
             get_promise_from_radial_event(input, "keydown", "Enter"),
             get_promise_from_button_event(button, "click"),
         ]);
-        const checked = Array.from(input).filter(((radial) => radial.checked));
+        const checked = Array.from(input).filter((radial) => radial.checked);
         game_content.removeChild(game_content.lastChild);
         return checked[0].value;
     });
@@ -139,7 +152,7 @@ function create_character() {
             name: yield get_name(),
             age: yield get_age(),
             species: yield get_species(),
-            gender: "",
+            gender: yield get_gender(),
             traits: [],
             inventory: [],
         };
@@ -200,21 +213,20 @@ function get_species() {
         }
     });
 }
-/*
-async function get_gender() {
-  let gender = await read_line(
-    "What is your gender? (Female, Male, Gender Fluid, Non-Binary, Agender, Other)"
-  );
-  gender = capitalize_words(gender);
-  let validated_gender = gender_validator.safeParse(gender);
-  if (validated_gender.success) {
-    return gender;
-  } else {
-    console.log("Please provide a gender from the list provided.");
-    await get_gender();
-  }
+function get_gender() {
+    return __awaiter(this, void 0, void 0, function* () {
+        append_element("What is your gender?");
+        let gender = yield read_line_radial(genders);
+        if (genders.indexOf(gender) !== -1) {
+            return gender;
+        }
+        else {
+            console.log("Please provide a gender from the list provided.");
+            return yield get_gender();
+        }
+    });
 }
-
+/*
 async function get_best_pony() {
   const question = "Who is best Pony? :";
   const answer = "Pinkie Pie";
