@@ -179,7 +179,7 @@ function get_age() {
             return age;
         }
         else {
-            console.log("Please provide an age between 18 and 99.");
+            append_element("Please provide an age between 18 and 99.");
             return yield get_age();
         }
     });
@@ -221,7 +221,7 @@ function get_gender() {
             return gender;
         }
         else {
-            console.log("Please provide a gender from the list provided.");
+            append_element("Please provide a gender from the list provided.");
             return yield get_gender();
         }
     });
