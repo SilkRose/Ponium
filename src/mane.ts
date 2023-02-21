@@ -56,6 +56,7 @@ async function mane() {
     append_element(player.species.sub_race.toString());
   }
   append_element(player.gender);
+  await get_best_pony();
 }
 
 function append_element(element: string) {
@@ -87,9 +88,7 @@ async function read_line_text(): Promise<string> {
   return input.value.trim();
 }
 
-async function read_line_radial<T>(
-  options: readonly string[]
-): Promise<T> {
+async function read_line_radial<T>(options: readonly string[]): Promise<T> {
   const new_element = document.createElement("p");
   let radials: string[] = [];
   for (let i = 0; i < options.length; i++) {
@@ -224,12 +223,17 @@ async function get_age(): Promise<number> {
 
 async function get_species(): Promise<Species> {
   append_element(`What species are you?)`);
-  let race = await read_line_radial<Species["race"]>([pony, ...nonpony_species]);
+  let race = await read_line_radial<Species["race"]>([
+    pony,
+    ...nonpony_species,
+  ]);
   if (race === pony) {
     append_element(`What pony race are you?`);
     return {
       race: race,
-      sub_race: await read_line_radial<typeof pony_sub_races[number]>(pony_sub_races),
+      sub_race: await read_line_radial<typeof pony_sub_races[number]>(
+        pony_sub_races
+      ),
     } as Species;
   } else {
     return { race: race } as Species;
@@ -242,43 +246,60 @@ async function get_gender(): Promise<Gender> {
   return gender as Gender;
 }
 
-/*
 async function get_best_pony() {
-  const question = "Who is best Pony? :";
+  const question = "Who is best Pony?";
   const answer = "Pinkie Pie";
-  rl.emitKeypressEvents(process.stdin);
-  if (process.stdin.isTTY) process.stdin.setRawMode(true);
-  process.stdin.write(question);
+  append_element(question);
   let i = 0;
   while (i < answer.length) {
-    i = await assert_best_pony(question, answer, i);
+    i = await assert_best_pony(answer, i);
   }
-  const question2 = `Please confirm that ${answer} is indeed best pony. :`;
+  const game_content = document.getElementById("game_content")!;
+  game_content.removeChild(game_content.lastChild!);
+  const question2 = `Please confirm that ${answer} is indeed best pony.`;
   const answer2 = "Yes!";
-  process.stdin.write("\n" + question2);
+  append_element(question2);
   i = 0;
   while (i < answer2.length) {
-    i = await assert_best_pony(question2, answer2, i);
+    i = await assert_best_pony(answer2, i);
   }
-  console.log();
-  process.stdin.setRawMode(false);
+  game_content.removeChild(game_content.lastChild!);
 }
 
-function assert_best_pony(question: string, answer: string, i: number) {
+async function assert_best_pony(answer: string, i: number) {
+  read_line_text_override(answer.slice(0, i), "best_pony");
   return new Promise<number>((res) => {
-    process.stdin.once("keypress", (_, key) => {
-      //if (key && key.name == "q") process.exit();
+    document.getElementById("input")?.addEventListener("keydown", (key) => {
       let rv;
-      if (key.name === "backspace" || key.name === "delete") rv = i - 1;
+      if (key.key === "backspace" || key.key === "delete") rv = i - 1;
       else rv = i + 1;
       if (rv < 0) rv = 0;
-      let text = question + answer.slice(0, rv);
-      process.stdout.write("\r");
-      process.stdout.write(" ".repeat(process.stdout.columns));
-      process.stdout.write("\r");
-      process.stdout.write(text);
       res(rv);
     });
   });
 }
- */
+
+async function read_line_text_override(value: string, name: string) {
+  const new_element = document.createElement("p");
+  new_element.innerHTML = `
+  <div id="input_field">
+    <input type="text" id="input" name="${name}" placeholder="Enter response..." value="${value}">
+    <button id="submit">Enter</button>
+  </div>`;
+  const game_content = document.getElementById("game_content")!;
+  if (document.getElementById("input_field") === null) {
+    game_content.appendChild(new_element);
+  } else {
+    document.getElementById("input_field")!.outerHTML = new_element.innerHTML;
+  }
+  new_element.scrollIntoView();
+  const input = document.getElementById("input") as HTMLInputElement;
+  input.focus();
+  input.value = value;
+  input.setSelectionRange(value.length, value.length);
+}
+
+// TODO:
+// finish/fix best pony.
+// make best pony enter button only appear when the input value matches the answer.
+// make enter button go away if they press backspace and the value matches the answer.
