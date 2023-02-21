@@ -98,7 +98,7 @@ function get_name() {
     return __awaiter(this, void 0, void 0, function* () {
         append_element("What is your name?");
         let name = yield read_line();
-        if (name_validator(name)) {
+        if (name.length >= 2 && name.length <= 32) {
             return name;
         }
         else {
@@ -107,19 +107,11 @@ function get_name() {
         }
     });
 }
-function name_validator(name) {
-    if (name.length >= 2 && name.length <= 32) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
 function get_age() {
     return __awaiter(this, void 0, void 0, function* () {
         append_element("How old are you?");
         let age = parseInt(yield read_line());
-        if (age_validator(age)) {
+        if (age >= 18 && age <= 100) {
             return age;
         }
         else {
@@ -127,14 +119,6 @@ function get_age() {
             return yield get_age();
         }
     });
-}
-function age_validator(age) {
-    if (age >= 18 && age <= 100) {
-        return true;
-    }
-    else {
-        return false;
-    }
 }
 function get_species() {
     return __awaiter(this, void 0, void 0, function* () {
