@@ -173,10 +173,10 @@ function get_age() {
 }
 function get_species() {
     return __awaiter(this, void 0, void 0, function* () {
-        append_element(`What species are you? (${pony}, ${nonpony_species.join(", ")})`);
+        append_element(`What species are you?)`);
         let race = yield read_line_radial([pony, ...nonpony_species]);
         if (race === pony) {
-            append_element(`What pony race are you? (${pony_sub_races.join(", ")})`);
+            append_element(`What pony race are you?`);
             let sub_race = yield read_line_radial(pony_sub_races);
             if (pony_sub_races.indexOf(sub_race) !== -1) {
                 return {
