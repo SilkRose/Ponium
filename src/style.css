@@ -58,6 +58,24 @@ main {
   border-color: #eb458b;
 }
 
+#input_radial input:focus {
+  outline: none;
+  border-color: #eb458b;
+}
+
+#input_radial input[type="radio"]:checked + label {
+  border-color: #a5a5a5;
+  text-decoration: underline;
+  text-decoration-color: #a5a5a5;
+  text-decoration-thickness: 0.15rem;
+  text-underline-offset: 0.25rem;
+}
+
+#input_radial input[type="radio"]:checked:focus + label {
+  text-decoration-color: #eb458b;
+}
+
+#input_radial button,
 #input_field button {
   border-color: #a5a5a5;
   border-style: solid;
@@ -65,6 +83,8 @@ main {
   padding: 0.5rem;
 }
 
+#input_radial button:hover,
+#input_radial button:focus,
 #input_field button:hover,
 #input_field button:focus {
   outline: none;

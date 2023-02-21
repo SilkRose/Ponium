@@ -48,7 +48,7 @@ function append_element(element: string) {
   new_element.scrollIntoView();
 }
 
-async function read_line(): Promise<string> {
+async function read_line_text(): Promise<string> {
   const new_element = document.createElement("p");
   new_element.innerHTML = `<div id="input_field"><input type="text" id="input" placeholder="Enter response..."><button id="submit">Enter</button></div>`;
   const game_content = document.getElementById("game_content")!;
@@ -63,6 +63,42 @@ async function read_line(): Promise<string> {
   ]);
   game_content.removeChild(game_content.lastChild!);
   return input.value.trim();
+}
+
+async function read_line_radial(options: string[]): Promise<string> {
+  const new_element = document.createElement("p");
+  let radials: string[] = [];
+  for (let i = 0; i < options.length; i++) {
+    if (i === 0) {
+      radials.push(`
+      <input type="radio" id="${options[i]}" name="radial" value="${options[i]}" checked />
+      <label for="${options[i]}">${options[i]}</label>`);
+    } else {
+      radials.push(`
+      <input type="radio" id="${options[i]}" name="radial" value="${options[i]}" />
+      <label for="${options[i]}">${options[i]}</label>`);
+    }
+  }
+  new_element.innerHTML = `
+  <div id="input_radial">
+    ${radials.join()}
+    <button id="submit">Enter</button>
+  </div>`;
+  const game_content = document.getElementById("game_content")!;
+  game_content.appendChild(new_element);
+  new_element.scrollIntoView();
+  const input = document.getElementsByName(
+    "radial"
+  ) as NodeListOf<HTMLInputElement>;
+  const button = document.getElementById("submit") as HTMLButtonElement;
+  input[0].focus();
+  await Promise.race([
+    get_promise_from_radial_event(input, "keydown", "Enter"),
+    get_promise_from_button_event(button, "click"),
+  ]);
+  const checked = Array.from(input).filter(((radial) => radial.checked));
+  game_content.removeChild(game_content.lastChild!);
+  return checked[0].value;
 }
 
 function get_promise_from_input_event(
@@ -93,6 +129,26 @@ function get_promise_from_button_event(item: HTMLButtonElement, event: string) {
   });
 }
 
+function get_promise_from_radial_event(
+  items: NodeListOf<HTMLInputElement>,
+  event: string,
+  required_key: string
+) {
+  return new Promise<void>((resolve) => {
+    const listener = () => {
+      self.onkeydown = function (key) {
+        if (key.key === required_key) {
+          self.removeEventListener(event, listener);
+          resolve();
+        }
+      };
+    };
+    for (let item of items) {
+      item.addEventListener(event, listener);
+    }
+  });
+}
+
 function capitalize_string(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
@@ -118,7 +174,7 @@ async function create_character() {
 
 async function get_name(): Promise<string> {
   append_element("What is your name?");
-  let name = await read_line();
+  let name = await read_line_text();
   if (name.length >= 2 && name.length <= 32) {
     return name;
   } else {
@@ -129,7 +185,7 @@ async function get_name(): Promise<string> {
 
 async function get_age(): Promise<number> {
   append_element("How old are you?");
-  let age = parseInt(await read_line());
+  let age = parseInt(await read_line_text());
   if (age >= 18 && age <= 100) {
     return age;
   } else {
@@ -142,12 +198,10 @@ async function get_species(): Promise<Species> {
   append_element(
     `What species are you? (${pony}, ${nonpony_species.join(", ")})`
   );
-  let race = await read_line();
-  race = capitalize_string(race);
+  let race = await read_line_radial([pony, ...nonpony_species]);
   if (race === pony) {
     append_element(`What pony race are you? (${pony_sub_races.join(", ")})`);
-    let sub_race = await read_line();
-    sub_race = capitalize_words(sub_race);
+    let sub_race = await read_line_radial(pony_sub_races);
     if (pony_sub_races.indexOf(sub_race) !== -1) {
       return {
         race: race,
