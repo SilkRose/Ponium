@@ -53,14 +53,14 @@ main {
   padding: 0.5rem;
 }
 
+#input_radial input:focus,
 #input_field input:focus {
   outline: none;
   border-color: #eb458b;
 }
 
-#input_radial input:focus {
-  outline: none;
-  border-color: #eb458b;
+#input_radial input[type="radio"]:checked:focus {
+  accent-color: #eb458b;
 }
 
 #input_radial input[type="radio"]:checked + label {
