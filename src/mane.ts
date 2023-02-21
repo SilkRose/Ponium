@@ -119,7 +119,7 @@ async function create_character() {
 async function get_name(): Promise<string> {
   append_element("What is your name?");
   let name = await read_line();
-  if (name_validator(name)) {
+  if (name.length >= 2 && name.length <= 32) {
     return name;
   } else {
     append_element("Please provide a name between 2 and 32 characters.");
@@ -127,30 +127,14 @@ async function get_name(): Promise<string> {
   }
 }
 
-function name_validator(name: string) {
-  if (name.length >= 2 && name.length <= 32) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 async function get_age(): Promise<number> {
   append_element("How old are you?");
   let age = parseInt(await read_line());
-  if (age_validator(age)) {
+  if (age >= 18 && age <= 100) {
     return age;
   } else {
     console.log("Please provide an age between 18 and 99.");
     return await get_age();
-  }
-}
-
-function age_validator(age: number) {
-  if (age >= 18 && age <= 100) {
-    return true;
-  } else {
-    return false;
   }
 }
 
