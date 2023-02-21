@@ -4,17 +4,23 @@ import { items } from "./game_data/items.js";
 
 const pony = "Pony" as const;
 
-const nonpony_species = ["Kirin", "Dragon", "Donkey", "Mule", "Griffin"];
+const nonpony_species = [
+  "Kirin",
+  "Dragon",
+  "Donkey",
+  "Mule",
+  "Griffin",
+] as const;
 
-const pony_sub_races = ["Alicorn", "Unicorn", "Pegasus", "Earth Pony"];
+const pony_sub_races = ["Alicorn", "Unicorn", "Pegasus", "Earth Pony"] as const;
 
 type Species =
   | {
-      race: "Pony";
-      sub_race: "Alicorn" | "Unicorn" | "Pegasus" | "Earth Pony";
+      race: typeof pony;
+      sub_race: typeof pony_sub_races[number];
     }
   | {
-      race: "Kirin" | "Dragon" | "Donkey" | "Mule" | "Griffin";
+      race: typeof nonpony_species[number];
     };
 
 const genders = [
@@ -24,15 +30,9 @@ const genders = [
   "Non-Binary",
   "Agender",
   "Other",
-];
+] as const;
 
-type Gender =
-  | "Female"
-  | "Male"
-  | "Gender Fluid"
-  | "Non-Binary"
-  | "Agender"
-  | "Other";
+type Gender = typeof genders[number];
 
 type Character = {
   name: string;
@@ -87,7 +87,9 @@ async function read_line_text(): Promise<string> {
   return input.value.trim();
 }
 
-async function read_line_radial(options: string[]): Promise<string> {
+async function read_line_radial<T>(
+  options: readonly string[]
+): Promise<T> {
   const new_element = document.createElement("p");
   let radials: string[] = [];
   for (let i = 0; i < options.length; i++) {
@@ -118,9 +120,13 @@ async function read_line_radial(options: string[]): Promise<string> {
     get_promise_from_radial_event(input, "keydown", "Enter"),
     get_promise_from_button_event(button, "click"),
   ]);
-  const checked = Array.from(input).filter((radial) => radial.checked);
+  const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
   game_content.removeChild(game_content.lastChild!);
-  return checked[0].value;
+  if (options.indexOf(checked) != -1) {
+    return checked as T;
+  } else {
+    return await read_line_radial<T>(options);
+  }
 }
 
 function get_promise_from_input_event(
@@ -218,38 +224,22 @@ async function get_age(): Promise<number> {
 
 async function get_species(): Promise<Species> {
   append_element(`What species are you?)`);
-  let race = await read_line_radial([pony, ...nonpony_species]);
+  let race = await read_line_radial<Species["race"]>([pony, ...nonpony_species]);
   if (race === pony) {
     append_element(`What pony race are you?`);
-    let sub_race = await read_line_radial(pony_sub_races);
-    if (pony_sub_races.indexOf(sub_race) !== -1) {
-      return {
-        race: race,
-        sub_race: sub_race,
-      } as Species;
-    } else {
-      append_element("Please enter a valid sub race.");
-      return await get_species();
-    }
+    return {
+      race: race,
+      sub_race: await read_line_radial<typeof pony_sub_races[number]>(pony_sub_races),
+    } as Species;
   } else {
-    if (nonpony_species.indexOf(race) !== -1) {
-      return { race: race } as Species;
-    } else {
-      append_element("Please enter a valid sub race.");
-      return await get_species();
-    }
+    return { race: race } as Species;
   }
 }
 
 async function get_gender(): Promise<Gender> {
   append_element("What is your gender?");
-  let gender = await read_line_radial(genders);
-  if (genders.indexOf(gender) !== -1) {
-    return gender as Gender;
-  } else {
-    append_element("Please provide a gender from the list provided.");
-    return await get_gender();
-  }
+  let gender = await read_line_radial<Gender>(genders);
+  return gender as Gender;
 }
 
 /*
