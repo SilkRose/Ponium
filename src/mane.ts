@@ -17,11 +17,28 @@ type Species =
       race: "Kirin" | "Dragon" | "Donkey" | "Mule" | "Griffin";
     };
 
+const genders = [
+  "Female",
+  "Male",
+  "Gender Fluid",
+  "Non-Binary",
+  "Agender",
+  "Other",
+];
+
+type Gender =
+  | "Female"
+  | "Male"
+  | "Gender Fluid"
+  | "Non-Binary"
+  | "Agender"
+  | "Other";
+
 type Character = {
   name: string;
   age: number;
   species: Species;
-  gender: string;
+  gender: Gender;
   traits: "";
   inventory: "";
 };
@@ -38,6 +55,7 @@ async function mane() {
   if (player.species.race === "Pony") {
     append_element(player.species.sub_race.toString());
   }
+  append_element(player.gender);
 }
 
 function append_element(element: string) {
@@ -50,7 +68,11 @@ function append_element(element: string) {
 
 async function read_line_text(): Promise<string> {
   const new_element = document.createElement("p");
-  new_element.innerHTML = `<div id="input_field"><input type="text" id="input" placeholder="Enter response..."><button id="submit">Enter</button></div>`;
+  new_element.innerHTML = `
+  <div id="input_field">
+    <input type="text" id="input" placeholder="Enter response...">
+    <button id="submit">Enter</button>
+  </div>`;
   const game_content = document.getElementById("game_content")!;
   game_content.appendChild(new_element);
   new_element.scrollIntoView();
@@ -96,7 +118,7 @@ async function read_line_radial(options: string[]): Promise<string> {
     get_promise_from_radial_event(input, "keydown", "Enter"),
     get_promise_from_button_event(button, "click"),
   ]);
-  const checked = Array.from(input).filter(((radial) => radial.checked));
+  const checked = Array.from(input).filter((radial) => radial.checked);
   game_content.removeChild(game_content.lastChild!);
   return checked[0].value;
 }
@@ -166,7 +188,7 @@ async function create_character() {
     name: await get_name(),
     age: await get_age(),
     species: await get_species(),
-    gender: "",
+    gender: await get_gender(),
     traits: [],
     inventory: [],
   };
@@ -195,9 +217,7 @@ async function get_age(): Promise<number> {
 }
 
 async function get_species(): Promise<Species> {
-  append_element(
-    `What species are you?)`
-  );
+  append_element(`What species are you?)`);
   let race = await read_line_radial([pony, ...nonpony_species]);
   if (race === pony) {
     append_element(`What pony race are you?`);
@@ -221,21 +241,18 @@ async function get_species(): Promise<Species> {
   }
 }
 
-/*
-async function get_gender() {
-  let gender = await read_line(
-    "What is your gender? (Female, Male, Gender Fluid, Non-Binary, Agender, Other)"
-  );
-  gender = capitalize_words(gender);
-  let validated_gender = gender_validator.safeParse(gender);
-  if (validated_gender.success) {
-    return gender;
+async function get_gender(): Promise<Gender> {
+  append_element("What is your gender?");
+  let gender = await read_line_radial(genders);
+  if (genders.indexOf(gender) !== -1) {
+    return gender as Gender;
   } else {
     console.log("Please provide a gender from the list provided.");
-    await get_gender();
+    return await get_gender();
   }
 }
 
+/*
 async function get_best_pony() {
   const question = "Who is best Pony? :";
   const answer = "Pinkie Pie";
