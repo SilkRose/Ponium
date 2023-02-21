@@ -91,6 +91,10 @@ main {
   border-color: #eb458b;
 }
 
+#input_radial button {
+  margin-left: 0.5rem;
+}
+
 ::-webkit-input-placeholder {
   /* WebKit, Blink, Edge */
   color: rgb(85, 85, 85);
