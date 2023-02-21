@@ -102,7 +102,7 @@ function read_line_radial(options) {
         ]);
         const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
         game_content.removeChild(game_content.lastChild);
-        if (options.indexOf(checked) !== -1) {
+        if (options.indexOf(checked) != -1) {
             return checked;
         }
         else {
