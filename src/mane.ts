@@ -267,77 +267,62 @@ async function assert_best_pony(answer: string) {
     <div id="input_field">
       <input type="text" id="input" placeholder="Enter response...">
     </div>`;
-  input_element_complete.innerHTML = `
-    <div id="input_field">
-      <input type="text" id="input" placeholder="Enter response..." value="${answer}">
-      <button id="submit">Enter</button>
-    </div>`;
+  const button = document.createElement("button");
+  button.id = "submit";
+  button.innerText = "Enter";
   const game_content = document.getElementById("game_content")!;
   game_content.appendChild(input_element);
   input_element.scrollIntoView();
   const input = document.getElementById("input") as HTMLInputElement;
   input.focus();
   await Promise.resolve(
-    get_promise_from_input_event_keydown_override(
+    get_promise_from_input_event_override(
       input,
-      "keydown",
+      "keypress",
       answer,
-      input_element,
-      input_element_complete
+      button
     )
   );
 }
 
-function get_promise_from_input_event_keydown_override(
+function get_promise_from_input_event_override(
   item: HTMLInputElement,
   event: string,
   answer: string,
-  input_element: HTMLParagraphElement,
-  input_element_complete: HTMLParagraphElement
-) {
-  return new Promise<void>((resolve) => {
-    const listener = async () => {
-      item.onkeydown = async function () {
-        await Promise.resolve(
-          get_promise_from_input_event_keyup_override(
-            item,
-            "keyup",
-            answer,
-            input_element,
-            input_element_complete
-          )
-        );
-        item.removeEventListener(event, listener);
-        resolve();
-      };
-    };
-    item.addEventListener(event, listener);
-  });
-}
-
-function get_promise_from_input_event_keyup_override(
-  item: HTMLInputElement,
-  event: string,
-  answer: string,
-  input_element: HTMLParagraphElement,
-  input_element_complete: HTMLParagraphElement
+  button: HTMLButtonElement
 ) {
   return new Promise<void>((resolve) => {
     const listener = () => {
       item.onkeyup = function (key) {
-        if (key.key !== "Enter") {
-          item.value = answer.slice(0, item.value.length);
-        } else if (item.value === answer && key.key === "Enter") {
-          item.removeEventListener(event, listener);
-          resolve();
+        if (item.value.length !== 0) {
+          switch (key.key) {
+            case "Enter":
+              if (item.value === answer) {
+                item.removeEventListener(event, listener);
+                resolve();
+              }
+            case "Delete":
+              if (item.value === answer) {
+                button.remove();
+              }
+              item.value = answer.slice(0, item.value.length - 1);
+            case "Backspace":
+              if (document.contains(button)) {
+                button.remove();
+              }
+            default:
+              item.value = answer.slice(0, item.value.length);
+              if (item.value === answer) {
+                item.parentElement!.appendChild(button);
+                button.onclick = function () {
+                  item.removeEventListener(event, listener);
+                  resolve();
+                }
+              }
+          }
         }
       };
     };
     item.addEventListener(event, listener);
   });
 }
-
-// TODO:
-// finish/fix best pony.
-// make best pony enter button only appear when the input value matches the answer.
-// make enter button go away if they press backspace and the value matches the answer.
