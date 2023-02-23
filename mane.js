@@ -266,6 +266,9 @@ function get_promise_from_input_event_override(item, event, answer, button) {
                                 item.removeEventListener(event, listener);
                                 resolve();
                             }
+                            else {
+                                item.value = answer.slice(0, item.value.length + 1);
+                            }
                         case "Delete":
                             if (item.value === answer) {
                                 button.remove();
