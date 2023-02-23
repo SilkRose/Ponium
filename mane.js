@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import * as characters from "./game_data/character/characters.js";
 const pony = "Pony";
+const best_pony = "Pinkie Pie";
 const nonpony_species = [
     "Kirin",
     "Dragon",
@@ -228,7 +229,7 @@ function get_best_pony() {
         const answer = "Pinkie Pie";
         append_element(question);
         let i = 0;
-        while (i < answer.length) {
+        while (i <= answer.length) {
             i = yield assert_best_pony(answer, i);
         }
         const game_content = document.getElementById("game_content");
@@ -237,7 +238,7 @@ function get_best_pony() {
         const answer2 = "Yes!";
         append_element(question2);
         i = 0;
-        while (i < answer2.length) {
+        while (i <= answer2.length) {
             i = yield assert_best_pony(answer2, i);
         }
         game_content.removeChild(game_content.lastChild);
@@ -245,30 +246,41 @@ function get_best_pony() {
 }
 function assert_best_pony(answer, i) {
     return __awaiter(this, void 0, void 0, function* () {
-        read_line_text_override(answer.slice(0, i), "best_pony");
+        read_line_text_override(answer.slice(0, i));
         return new Promise((res) => {
             var _a;
             (_a = document.getElementById("input")) === null || _a === void 0 ? void 0 : _a.addEventListener("keydown", (key) => {
                 let rv;
-                if (key.key === "backspace" || key.key === "delete")
+                if (key.key === "Backspace" || key.key === "Delete")
                     rv = i - 1;
                 else
                     rv = i + 1;
                 if (rv < 0)
                     rv = 0;
+                if (key.key === "Enter" && i === answer.length) {
+                    console.log("testing");
+                }
                 res(rv);
             });
         });
     });
 }
-function read_line_text_override(value, name) {
+function read_line_text_override(value) {
     return __awaiter(this, void 0, void 0, function* () {
         const new_element = document.createElement("p");
-        new_element.innerHTML = `
-  <div id="input_field">
-    <input type="text" id="input" name="${name}" placeholder="Enter response..." value="${value}">
-    <button id="submit">Enter</button>
-  </div>`;
+        if (value === best_pony) {
+            new_element.innerHTML = `
+    <div id="input_field">
+      <input type="text" id="input" placeholder="Enter response..." value="${value}">
+      <button id="submit">Enter</button>
+    </div>`;
+        }
+        else {
+            new_element.innerHTML = `
+    <div id="input_field">
+      <input type="text" id="input" placeholder="Enter response..." value="${value}">
+    </div>`;
+        }
         const game_content = document.getElementById("game_content");
         if (document.getElementById("input_field") === null) {
             game_content.appendChild(new_element);
@@ -279,7 +291,6 @@ function read_line_text_override(value, name) {
         new_element.scrollIntoView();
         const input = document.getElementById("input");
         input.focus();
-        input.value = value;
         input.setSelectionRange(value.length, value.length);
     });
 }
