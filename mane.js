@@ -226,72 +226,65 @@ function get_gender() {
 function get_best_pony() {
     return __awaiter(this, void 0, void 0, function* () {
         const question = "Who is best Pony?";
-        const answer = "Pinkie Pie";
         append_element(question);
-        let i = 0;
-        while (i <= answer.length) {
-            i = yield assert_best_pony(answer, i);
-        }
+        yield assert_best_pony(best_pony);
         const game_content = document.getElementById("game_content");
         game_content.removeChild(game_content.lastChild);
-        const question2 = `Please confirm that ${answer} is indeed best pony.`;
-        const answer2 = "Yes!";
+        const question2 = `Please confirm that ${best_pony} is indeed best pony.`;
         append_element(question2);
-        i = 0;
-        while (i <= answer2.length) {
-            i = yield assert_best_pony(answer2, i);
-        }
+        yield assert_best_pony("Yes!");
         game_content.removeChild(game_content.lastChild);
     });
 }
-function assert_best_pony(answer, i) {
+function assert_best_pony(answer) {
     return __awaiter(this, void 0, void 0, function* () {
-        read_line_text_override(answer.slice(0, i));
-        return new Promise((res) => {
-            var _a;
-            (_a = document.getElementById("input")) === null || _a === void 0 ? void 0 : _a.addEventListener("keydown", (key) => {
-                let rv;
-                if (key.key === "Backspace" || key.key === "Delete")
-                    rv = i - 1;
-                else
-                    rv = i + 1;
-                if (rv < 0)
-                    rv = 0;
-                if (key.key === "Enter" && i === answer.length) {
-                    console.log("testing");
-                }
-                res(rv);
-            });
-        });
-    });
-}
-function read_line_text_override(value) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const new_element = document.createElement("p");
-        if (value === best_pony) {
-            new_element.innerHTML = `
+        const input_element = document.createElement("p");
+        const input_element_complete = document.createElement("p");
+        input_element.innerHTML = `
     <div id="input_field">
-      <input type="text" id="input" placeholder="Enter response..." value="${value}">
+      <input type="text" id="input" placeholder="Enter response...">
+    </div>`;
+        input_element_complete.innerHTML = `
+    <div id="input_field">
+      <input type="text" id="input" placeholder="Enter response..." value="${answer}">
       <button id="submit">Enter</button>
     </div>`;
-        }
-        else {
-            new_element.innerHTML = `
-    <div id="input_field">
-      <input type="text" id="input" placeholder="Enter response..." value="${value}">
-    </div>`;
-        }
         const game_content = document.getElementById("game_content");
-        if (document.getElementById("input_field") === null) {
-            game_content.appendChild(new_element);
-        }
-        else {
-            document.getElementById("input_field").outerHTML = new_element.innerHTML;
-        }
-        new_element.scrollIntoView();
+        game_content.appendChild(input_element);
+        input_element.scrollIntoView();
         const input = document.getElementById("input");
         input.focus();
-        input.setSelectionRange(value.length, value.length);
+        yield Promise.resolve(get_promise_from_input_event_keydown_override(input, "keydown", answer, input_element, input_element_complete));
+    });
+}
+function get_promise_from_input_event_keydown_override(item, event, answer, input_element, input_element_complete) {
+    return new Promise((resolve) => {
+        const listener = () => __awaiter(this, void 0, void 0, function* () {
+            item.onkeydown = function () {
+                return __awaiter(this, void 0, void 0, function* () {
+                    yield Promise.resolve(get_promise_from_input_event_keyup_override(item, "keyup", answer, input_element, input_element_complete));
+                    item.removeEventListener(event, listener);
+                    resolve();
+                });
+            };
+        });
+        item.addEventListener(event, listener);
+    });
+}
+function get_promise_from_input_event_keyup_override(item, event, answer, input_element, input_element_complete) {
+    return new Promise((resolve) => {
+        const listener = () => {
+            item.onkeyup = function (key) {
+                if (key.key !== "Enter") {
+                    item.value = answer.slice(0, item.value.length);
+                }
+                else if (item.value === answer && key.key === "Enter") {
+                    item.removeEventListener(event, listener);
+                    resolve();
+                }
+            };
+        };
+        item.addEventListener(event, listener);
     });
 }
 // TODO:
