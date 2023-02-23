@@ -278,7 +278,7 @@ async function assert_best_pony(answer: string) {
   await Promise.resolve(
     get_promise_from_input_event_override(
       input,
-      "keypress",
+      "keydown",
       answer,
       button
     )
@@ -300,6 +300,8 @@ function get_promise_from_input_event_override(
               if (item.value === answer) {
                 item.removeEventListener(event, listener);
                 resolve();
+              } else {
+                item.value = answer.slice(0, item.value.length + 1)
               }
             case "Delete":
               if (item.value === answer) {
