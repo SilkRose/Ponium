@@ -4,6 +4,8 @@ import { items } from "./game_data/items.js";
 
 const pony = "Pony" as const;
 
+const best_pony = "Pinkie Pie" as const;
+
 const nonpony_species = [
   "Kirin",
   "Dragon",
@@ -248,55 +250,91 @@ async function get_gender(): Promise<Gender> {
 
 async function get_best_pony() {
   const question = "Who is best Pony?";
-  const answer = "Pinkie Pie";
   append_element(question);
-  let i = 0;
-  while (i < answer.length) {
-    i = await assert_best_pony(answer, i);
-  }
+  await assert_best_pony(best_pony);
   const game_content = document.getElementById("game_content")!;
   game_content.removeChild(game_content.lastChild!);
-  const question2 = `Please confirm that ${answer} is indeed best pony.`;
-  const answer2 = "Yes!";
+  const question2 = `Please confirm that ${best_pony} is indeed best pony.`;
   append_element(question2);
-  i = 0;
-  while (i < answer2.length) {
-    i = await assert_best_pony(answer2, i);
-  }
+  await assert_best_pony("Yes!");
   game_content.removeChild(game_content.lastChild!);
 }
 
-async function assert_best_pony(answer: string, i: number) {
-  read_line_text_override(answer.slice(0, i), "best_pony");
-  return new Promise<number>((res) => {
-    document.getElementById("input")?.addEventListener("keydown", (key) => {
-      let rv;
-      if (key.key === "backspace" || key.key === "delete") rv = i - 1;
-      else rv = i + 1;
-      if (rv < 0) rv = 0;
-      res(rv);
-    });
+async function assert_best_pony(answer: string) {
+  const input_element = document.createElement("p");
+  const input_element_complete = document.createElement("p");
+  input_element.innerHTML = `
+    <div id="input_field">
+      <input type="text" id="input" placeholder="Enter response...">
+    </div>`;
+  input_element_complete.innerHTML = `
+    <div id="input_field">
+      <input type="text" id="input" placeholder="Enter response..." value="${answer}">
+      <button id="submit">Enter</button>
+    </div>`;
+  const game_content = document.getElementById("game_content")!;
+  game_content.appendChild(input_element);
+  input_element.scrollIntoView();
+  const input = document.getElementById("input") as HTMLInputElement;
+  input.focus();
+  await Promise.resolve(
+    get_promise_from_input_event_keydown_override(
+      input,
+      "keydown",
+      answer,
+      input_element,
+      input_element_complete
+    )
+  );
+}
+
+function get_promise_from_input_event_keydown_override(
+  item: HTMLInputElement,
+  event: string,
+  answer: string,
+  input_element: HTMLParagraphElement,
+  input_element_complete: HTMLParagraphElement
+) {
+  return new Promise<void>((resolve) => {
+    const listener = async () => {
+      item.onkeydown = async function () {
+        await Promise.resolve(
+          get_promise_from_input_event_keyup_override(
+            item,
+            "keyup",
+            answer,
+            input_element,
+            input_element_complete
+          )
+        );
+        item.removeEventListener(event, listener);
+        resolve();
+      };
+    };
+    item.addEventListener(event, listener);
   });
 }
 
-async function read_line_text_override(value: string, name: string) {
-  const new_element = document.createElement("p");
-  new_element.innerHTML = `
-  <div id="input_field">
-    <input type="text" id="input" name="${name}" placeholder="Enter response..." value="${value}">
-    <button id="submit">Enter</button>
-  </div>`;
-  const game_content = document.getElementById("game_content")!;
-  if (document.getElementById("input_field") === null) {
-    game_content.appendChild(new_element);
-  } else {
-    document.getElementById("input_field")!.outerHTML = new_element.innerHTML;
-  }
-  new_element.scrollIntoView();
-  const input = document.getElementById("input") as HTMLInputElement;
-  input.focus();
-  input.value = value;
-  input.setSelectionRange(value.length, value.length);
+function get_promise_from_input_event_keyup_override(
+  item: HTMLInputElement,
+  event: string,
+  answer: string,
+  input_element: HTMLParagraphElement,
+  input_element_complete: HTMLParagraphElement
+) {
+  return new Promise<void>((resolve) => {
+    const listener = () => {
+      item.onkeyup = function (key) {
+        if (key.key !== "Enter") {
+          item.value = answer.slice(0, item.value.length);
+        } else if (item.value === answer && key.key === "Enter") {
+          item.removeEventListener(event, listener);
+          resolve();
+        }
+      };
+    };
+    item.addEventListener(event, listener);
+  });
 }
 
 // TODO:
