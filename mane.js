@@ -252,7 +252,7 @@ function assert_best_pony(answer) {
         input_element.scrollIntoView();
         const input = document.getElementById("input");
         input.focus();
-        yield Promise.resolve(get_promise_from_input_event_override(input, "keypress", answer, button));
+        yield Promise.resolve(get_promise_from_input_event_override(input, "keydown", answer, button));
     });
 }
 function get_promise_from_input_event_override(item, event, answer, button) {
