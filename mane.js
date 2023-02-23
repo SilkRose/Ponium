@@ -252,24 +252,10 @@ function assert_best_pony(answer) {
         input_element.scrollIntoView();
         const input = document.getElementById("input");
         input.focus();
-        yield Promise.resolve(get_promise_from_input_event_keydown_override(input, "keypress", answer, button));
+        yield Promise.resolve(get_promise_from_input_event_override(input, "keypress", answer, button));
     });
 }
-function get_promise_from_input_event_keydown_override(item, event, answer, button) {
-    return new Promise((resolve) => {
-        const listener = () => __awaiter(this, void 0, void 0, function* () {
-            item.onkeydown = function () {
-                return __awaiter(this, void 0, void 0, function* () {
-                    yield Promise.resolve(get_promise_from_input_event_keyup_override(item, "keypress", answer, button));
-                    item.removeEventListener(event, listener);
-                    resolve();
-                });
-            };
-        });
-        item.addEventListener(event, listener);
-    });
-}
-function get_promise_from_input_event_keyup_override(item, event, answer, button) {
+function get_promise_from_input_event_override(item, event, answer, button) {
     return new Promise((resolve) => {
         const listener = () => {
             item.onkeyup = function (key) {
