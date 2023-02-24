@@ -26,6 +26,7 @@ const genders = [
     "Agender",
     "Other",
 ];
+const game_content = document.getElementById("game_content");
 window.onload = mane;
 function mane() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -43,23 +44,17 @@ function mane() {
     });
 }
 function append_element(element) {
-    const new_element = document.createElement("p");
+    const new_element = document.createElement("div");
+    new_element.className = "content";
     new_element.innerHTML = `${element}`;
-    const game_content = document.getElementById("game_content");
     game_content.appendChild(new_element);
     new_element.scrollIntoView();
 }
 function read_line_text() {
     return __awaiter(this, void 0, void 0, function* () {
-        const new_element = document.createElement("p");
-        new_element.innerHTML = `
-  <div id="input_field">
-    <input type="text" id="input" placeholder="Enter response...">
-    <button id="submit">Enter</button>
-  </div>`;
-        const game_content = document.getElementById("game_content");
-        game_content.appendChild(new_element);
-        new_element.scrollIntoView();
+        const input_field = create_text_input_field(true);
+        game_content.appendChild(input_field);
+        input_field.scrollIntoView();
         const input = document.getElementById("input");
         const button = document.getElementById("submit");
         input.focus();
@@ -73,28 +68,9 @@ function read_line_text() {
 }
 function read_line_radial(options) {
     return __awaiter(this, void 0, void 0, function* () {
-        const new_element = document.createElement("p");
-        let radials = [];
-        for (let i = 0; i < options.length; i++) {
-            if (i === 0) {
-                radials.push(`
-      <input type="radio" id="${options[i]}" name="radial" value="${options[i]}" checked />
-      <label for="${options[i]}">${options[i]}</label>`);
-            }
-            else {
-                radials.push(`
-      <input type="radio" id="${options[i]}" name="radial" value="${options[i]}" />
-      <label for="${options[i]}">${options[i]}</label>`);
-            }
-        }
-        new_element.innerHTML = `
-  <div id="input_radial">
-    ${radials.join()}
-    <button id="submit">Enter</button>
-  </div>`;
-        const game_content = document.getElementById("game_content");
-        game_content.appendChild(new_element);
-        new_element.scrollIntoView();
+        const radio_element = create_radial_input_field(options);
+        game_content.appendChild(radio_element);
+        radio_element.scrollIntoView();
         const input = document.getElementsByName("radial");
         const button = document.getElementById("submit");
         input[0].focus();
@@ -228,7 +204,6 @@ function get_best_pony() {
         const question = "Who is best Pony?";
         append_element(question);
         yield assert_best_pony(best_pony);
-        const game_content = document.getElementById("game_content");
         game_content.removeChild(game_content.lastChild);
         const question2 = `Please confirm that ${best_pony} is indeed best pony.`;
         append_element(question2);
@@ -238,18 +213,10 @@ function get_best_pony() {
 }
 function assert_best_pony(answer) {
     return __awaiter(this, void 0, void 0, function* () {
-        const input_element = document.createElement("p");
-        const input_element_complete = document.createElement("p");
-        input_element.innerHTML = `
-    <div id="input_field">
-      <input type="text" id="input" placeholder="Enter response...">
-    </div>`;
-        const button = document.createElement("button");
-        button.id = "submit";
-        button.innerText = "Enter";
-        const game_content = document.getElementById("game_content");
-        game_content.appendChild(input_element);
-        input_element.scrollIntoView();
+        const input_field = create_text_input_field(false);
+        const button = create_button_element("submit", "Enter");
+        game_content.appendChild(input_field);
+        input_field.scrollIntoView();
         const input = document.getElementById("input");
         input.focus();
         yield Promise.resolve(get_promise_from_input_event_override(input, "keydown", answer, button));
@@ -293,4 +260,58 @@ function get_promise_from_input_event_override(item, event, answer, button) {
         };
         item.addEventListener(event, listener);
     });
+}
+function create_text_input_field(button) {
+    const new_element = document.createElement("div");
+    new_element.id = "input_field";
+    new_element.className = "content";
+    new_element.appendChild(create_text_input_element("input", "Enter response..."));
+    if (button) {
+        new_element.appendChild(create_button_element("submit", "Enter"));
+    }
+    return new_element;
+}
+function create_text_input_element(id, placeholder, value) {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = id;
+    input.placeholder = placeholder;
+    if (value)
+        input.value = value;
+    return input;
+}
+function create_button_element(id, text) {
+    const button = document.createElement("button");
+    button.id = id;
+    button.innerText = text;
+    return button;
+}
+function create_radial_input_field(options) {
+    const new_element = document.createElement("div");
+    new_element.id = "input_radial";
+    new_element.className = "content";
+    new_element.appendChild(create_radio_element(options[0], true));
+    new_element.appendChild(create_label_element(options[0]));
+    for (let i = 1; i < options.length; i++) {
+        new_element.appendChild(create_radio_element(options[i]));
+        new_element.appendChild(create_label_element(options[i]));
+    }
+    new_element.appendChild(create_button_element("submit", "Enter"));
+    return new_element;
+}
+function create_radio_element(value, checked) {
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.id = value;
+    radio.name = "radial";
+    radio.value = value;
+    if (checked)
+        radio.checked = true;
+    return radio;
+}
+function create_label_element(text) {
+    const label = document.createElement("label");
+    label.setAttribute("for", text);
+    label.innerText = text;
+    return label;
 }
