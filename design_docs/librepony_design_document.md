@@ -32,8 +32,16 @@ LibrePony is a text adventure game written in TypeScript, about living in Ponyvi
 - I want there to be like 3 or 4 diff starting locations.
 - Idk if it will have any rpg elements, prob worry about that later.
 - I haven't decided if time is going to be always moving forward or just moves when you do actions.
+- The game only move forward when the player is doing stuff, making the game more relaxing and less strategic.
+- As the player does this, 1 of 2 timers will show up, either a non-skip-able timer where the length is determined by the activity they are doing, or a skip-able timer for dialogue and other stuff, where pressing a button to skip inserts the next line of dialogue.
+- Have a skill system?
+- Pinkie pie shows how the UI works, breaking the fourth wall.
 
 ### Styling
 - Have conversations act like text messaging, where it goes back and forth, showing the picture of the pony beside there speech bubble.
   - These conversations could even have text msg sounds when they pop up at the bottom of the screen.
     - Each character could have there own unique msg sound.
+
+### Story
+- The game starts on the train to Ponyville, once the player arrives Mayor Mare and Pinkie Pie are there to great them.
+- The game starts about 1 week before Twilight arrives in Ponyville.
