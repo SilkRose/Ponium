@@ -99,40 +99,9 @@ main {
   margin-left: 0.5rem;
 }
 
-::-webkit-input-placeholder {
-  /* WebKit, Blink, Edge */
-  color: rgb(85, 85, 85);
-  font-style: italic;
-}
-
-:-moz-placeholder {
-  /* Mozilla Firefox 4 to 18 */
-  color: rgb(85, 85, 85);
-  font-style: italic;
-  opacity: 1;
-}
-
-::-moz-placeholder {
-  /* Mozilla Firefox 19+ */
-  color: rgb(85, 85, 85);
-  font-style: italic;
-  opacity: 1;
-}
-
-:-ms-input-placeholder {
-  /* Internet Explorer 10-11 */
-  color: rgb(85, 85, 85);
-  font-style: italic;
-}
-
-::-ms-input-placeholder {
-  /* Microsoft Edge */
-  color: rgb(85, 85, 85);
-  font-style: italic;
-}
-
 ::placeholder {
-  /* Most modern browsers support this now. */
   color: rgb(85, 85, 85);
   font-style: italic;
+  /* Set opacity for Firefox. */
+  opacity: 1;
 }
