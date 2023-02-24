@@ -62,6 +62,11 @@ main {
   accent-color: #eb458b;
 }
 
+#input_radial input[type="radio"]:hover {
+  accent-color: #a5a5a5;
+}
+
+#input_radial input[type="radio"]:hover + label,
 #input_radial input[type="radio"]:checked + label {
   border-color: #a5a5a5;
   text-decoration: underline;
