@@ -34,6 +34,16 @@ main {
 
 #game_content > :last-child {
   padding-bottom: 0;
+  animation: fadein 250ms ease-in;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .content {
