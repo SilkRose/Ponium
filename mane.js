@@ -290,28 +290,29 @@ function create_radial_input_field(options) {
     const new_element = document.createElement("div");
     new_element.id = "input_radial";
     new_element.className = "content";
-    new_element.appendChild(create_radio_element(options[0], true));
-    new_element.appendChild(create_label_element(options[0]));
+    new_element.appendChild(create_label_with_radial_element(options[0], true));
     for (let i = 1; i < options.length; i++) {
-        new_element.appendChild(create_radio_element(options[i]));
-        new_element.appendChild(create_label_element(options[i]));
+        new_element.appendChild(create_label_with_radial_element(options[i]));
     }
     new_element.appendChild(create_button_element("submit", "Enter"));
     return new_element;
 }
+function create_label_with_radial_element(text, checked) {
+    const label = create_label_element(text);
+    label.prepend(create_radio_element(text, checked));
+    return label;
+}
+function create_label_element(text) {
+    const label = document.createElement("label");
+    label.innerText = text;
+    return label;
+}
 function create_radio_element(value, checked) {
     const radio = document.createElement("input");
     radio.type = "radio";
-    radio.id = value;
     radio.name = "radial";
     radio.value = value;
     if (checked)
         radio.checked = true;
     return radio;
-}
-function create_label_element(text) {
-    const label = document.createElement("label");
-    label.setAttribute("for", text);
-    label.innerText = text;
-    return label;
 }

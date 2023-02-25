@@ -37,7 +37,7 @@ main {
 }
 
 .content {
-  padding: 0.5rem 0rem 0.5rem 0rem;
+  padding: 0.5rem 0rem;
 }
 
 #input_field {
@@ -58,9 +58,17 @@ main {
   padding: 0.5rem;
 }
 
+#input_radial {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
 #input_radial input {
   outline: transparent;
-  margin: auto 0.5rem auto 0.5rem;
+  margin-right: 0.5rem;
 }
 
 #input_radial input:focus,
@@ -68,6 +76,8 @@ main {
   border-color: #eb458b;
 }
 
+#input_radial input[type="radio"]:active,
+#input_radial input[type="radio"]:checked,
 #input_radial input[type="radio"]:checked:focus {
   accent-color: #eb458b;
 }
@@ -76,12 +86,8 @@ main {
   accent-color: #a5a5a5;
 }
 
-#input_radial input[type="radio"] + label {
-  
-}
-
-#input_radial input[type="radio"]:hover + label,
-#input_radial input[type="radio"]:checked + label {
+#input_radial label:has(input[type="radio"]:hover),
+#input_radial label:has(input[type="radio"]:checked) {
   border-color: #a5a5a5;
   text-decoration: underline;
   text-decoration-color: #a5a5a5;
@@ -89,7 +95,7 @@ main {
   text-underline-offset: 0.25rem;
 }
 
-#input_radial input[type="radio"]:checked:focus + label {
+#input_radial label:has(input[type="radio"]:checked:focus) {
   text-decoration-color: #eb458b;
 }
 
@@ -109,10 +115,6 @@ main {
 #input_field button:focus {
   background-color: #d0d0d7;
   border-color: #eb458b;
-}
-
-#input_radial button {
-  margin-left: 0.5rem;
 }
 
 ::placeholder {
