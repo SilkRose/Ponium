@@ -1,3 +1,7 @@
+:root {
+  --large_timer_delay: 4500ms;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -37,15 +41,29 @@ main {
 }
 
 #game_content > * {
-  animation: fadein 250ms ease-in;
+  animation: fade_in 250ms ease-in;
 }
 
-@keyframes fadein {
+@keyframes fade_in {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
+  }
+}
+
+div.removing {
+  animation: fade_out 5s ease-in;
+  animation-delay: 5s;
+}
+
+@keyframes fade_out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
@@ -135,4 +153,41 @@ main {
   font-style: italic;
   /* Set opacity for Firefox. */
   opacity: 1;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+.single_timer_large {
+  position: relative;
+}
+
+.single_timer_large > img {
+  display: block;
+}
+
+.timer_filled {
+  position: relative;
+  width: 100%;
+}
+
+.timer_unfilled {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  animation-delay: 200ms;
+  animation-name: left_right_progress_bar;
+  animation-duration: var(--large_timer_delay);
+  animation-timing-function: steps(19, jump-none);
+}
+
+@keyframes left_right_progress_bar {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 100%);
+  }
 }

@@ -46,10 +46,14 @@ type Character = {
 };
 
 const game_content = document.getElementById("game_content")!;
+const root = document.documentElement;
 
 window.onload = mane;
 
 async function mane() {
+  await create_timer(4000);
+  await create_timer(1000);
+  await create_timer(9000);
   const test_data = characters.pinkie_pie;
   append_element(JSON.stringify(test_data));
   let player = await create_character();
@@ -299,11 +303,11 @@ function on_paste_event_override(input: HTMLInputElement, answer: string) {
     event.preventDefault();
     let text = event.clipboardData!.getData("text");
     if (input.value.length > answer.length) {
-      input.value = answer
+      input.value = answer;
     } else {
-      input.value = answer.slice(0, text.length)
+      input.value = answer.slice(0, text.length);
     }
-  })
+  });
 }
 
 function create_text_input_field(button: boolean) {
@@ -353,7 +357,7 @@ function create_radial_input_field(options: readonly string[]) {
 
 function create_label_with_radial_element(text: string, checked?: boolean) {
   const label = create_label_element(text);
-  label.prepend(create_radio_element(text, checked))
+  label.prepend(create_radio_element(text, checked));
   return label;
 }
 
@@ -370,4 +374,45 @@ function create_radio_element(value: string, checked?: boolean) {
   radio.value = value;
   if (checked) radio.checked = true;
   return radio;
+}
+
+async function create_timer(time: number) {
+  root.style.setProperty("--large_timer_delay", time + "ms");
+  const timer = document.createElement("div");
+  timer.className = "single_timer_large content";
+  const timer_filled = document.createElement("img");
+  timer_filled.className = "pixelated timer_filled";
+  timer_filled.src = "./game_assets/images/timer_filled.png";
+  const timer_unfilled = document.createElement("img");
+  timer_unfilled.className = "pixelated timer_unfilled";
+  timer_unfilled.src = "./game_assets/images/timer_unfilled.png";
+  timer.appendChild(timer_filled);
+  timer.appendChild(timer_unfilled);
+  game_content.appendChild(timer);
+  await get_promise_from_animation_event(timer_unfilled, "animationend");
+  sleep(200);
+  timer.classList.add("removing");
+  await get_promise_from_animation_event(timer, "animationend");
+  game_content.removeChild(timer);
+}
+
+function get_promise_from_animation_event(
+  item: Element,
+  event: string
+) {
+  return new Promise<void>((resolve) => {
+    const listener = () => {
+      item.removeEventListener(event, listener);
+      resolve();
+    };
+    item.addEventListener(event, listener);
+  });
+}
+
+function sleep(milliseconds: number) {
+  const date = Date.now();
+  let current_date = null;
+  do {
+    current_date = Date.now();
+  } while (current_date - date < milliseconds);
 }
