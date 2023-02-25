@@ -34,6 +34,9 @@ main {
 
 #game_content > :last-child {
   padding-bottom: 0;
+}
+
+#game_content > * {
   animation: fadein 250ms ease-in;
 }
 
