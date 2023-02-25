@@ -28,6 +28,14 @@ main {
   overflow: auto;
 }
 
+#game_content > :first-child {
+  padding-top: 0;
+}
+
+#game_content > :last-child {
+  padding-bottom: 0;
+}
+
 .content {
   padding: 0.5rem 0rem 0.5rem 0rem;
 }
@@ -35,26 +43,28 @@ main {
 #input_field {
   display: flex;
   gap: 0.5rem;
-  padding-bottom: 0;
 }
 
 #input_field input {
   flex-grow: 1;
+  min-height: 2.25rem;
+  outline: transparent;
   background-color: #f2f2f2;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-color: #a5a5a5;
+  border: solid #a5a5a5 0.15rem;
+  border-radius: 0;
+  border-top: transparent;
+  border-left: transparent;
+  border-right: transparent;
   padding: 0.5rem;
 }
 
 #input_radial input {
+  outline: transparent;
   margin: auto 0.5rem auto 0.5rem;
 }
 
 #input_radial input:focus,
 #input_field input:focus {
-  outline: none;
   border-color: #eb458b;
 }
 
@@ -64,6 +74,10 @@ main {
 
 #input_radial input[type="radio"]:hover {
   accent-color: #a5a5a5;
+}
+
+#input_radial input[type="radio"] + label {
+  
 }
 
 #input_radial input[type="radio"]:hover + label,
@@ -81,6 +95,8 @@ main {
 
 #input_radial button,
 #input_field button {
+  outline: transparent;
+  background-color: #e9e9ed;
   border-color: #a5a5a5;
   border-style: solid;
   border-radius: 0;
@@ -91,7 +107,7 @@ main {
 #input_radial button:focus,
 #input_field button:hover,
 #input_field button:focus {
-  outline: none;
+  background-color: #d0d0d7;
   border-color: #eb458b;
 }
 
