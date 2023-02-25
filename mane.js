@@ -219,6 +219,7 @@ function assert_best_pony(answer) {
         input_field.scrollIntoView();
         const input = document.getElementById("input");
         input.focus();
+        on_paste_event_override(input, answer);
         yield Promise.resolve(get_promise_from_input_event_override(input, "keydown", answer, button));
     });
 }
@@ -259,6 +260,18 @@ function get_promise_from_input_event_override(item, event, answer, button) {
             };
         };
         item.addEventListener(event, listener);
+    });
+}
+function on_paste_event_override(input, answer) {
+    input.addEventListener("paste", (event) => {
+        event.preventDefault();
+        let text = event.clipboardData.getData("text");
+        if (input.value.length > answer.length) {
+            input.value = answer;
+        }
+        else {
+            input.value = answer.slice(0, text.length);
+        }
     });
 }
 function create_text_input_field(button) {
