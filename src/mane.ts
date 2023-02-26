@@ -441,7 +441,7 @@ async function create_skip_timer(time: number) {
     ["pixelated", "timer_foreground", "timer_sides_to_center"],
     "./game_assets/images/skip_timer_filled.png"
   );
-  const text = create_paragraph_element("Press any button to continue.", [
+  const text = create_paragraph_element("Press any button, or click anywhere to continue.", [
     "content",
   ]);
   game_content.appendChild(text);
@@ -450,7 +450,8 @@ async function create_skip_timer(time: number) {
   game_content.appendChild(timer);
   await Promise.race([
     get_promise_from_animation_event(timer_unfilled, "animationend"),
-    get_promise_from_keydown_event(document.body, "keydown"),
+    get_promise_from_set_event(document.body, "keydown"),
+    get_promise_from_set_event(document.body, "click"),
   ]);
   sleep(200);
   remove_div_element(text);
@@ -469,10 +470,10 @@ function create_paragraph_element(
   return p;
 }
 
-function get_promise_from_keydown_event(item: HTMLElement, event: string) {
+function get_promise_from_set_event(item: HTMLElement, event: string) {
   return new Promise<void>((resolve) => {
-    const listener = (key: any) => {
-      key.preventDefault();
+    const listener = (set_event: any) => {
+      set_event.preventDefault();
       item.removeEventListener(event, listener);
       resolve();
     };
