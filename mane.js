@@ -31,14 +31,16 @@ const root = document.documentElement;
 window.onload = mane;
 function mane() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield create_skip_timer(5000);
-        yield create_timer(3000);
+        yield create_dual_timers(6000, "Baking pie: ", 10);
+        yield create_skip_timer(3000);
+        yield create_timer(2000);
         yield create_timer(1000);
         const test_data = characters.pinkie_pie;
         append_element(JSON.stringify(test_data));
         let player = yield create_character();
         yield create_skip_timer(5000);
         append_element(player.name);
+        yield create_dual_timers(8000, "Eating pie: ", 40);
         append_element(player.age.toString());
         yield create_skip_timer(5000);
         append_element(player.species.race.toString());
@@ -333,8 +335,8 @@ function create_radio_element(value, checked) {
 }
 function create_timer(time) {
     return __awaiter(this, void 0, void 0, function* () {
-        root.style.setProperty("--large_timer_delay", time + "ms");
-        const timer = create_div_element(["single_timer_large", "content"]);
+        root.style.setProperty("--timer_delay", time + "ms");
+        const timer = create_div_element(["timer"]);
         const timer_filled = create_image_element(["pixelated", "timer_background"], "./game_assets/images/timer_filled.png");
         const timer_unfilled = create_image_element(["pixelated", "timer_foreground", "timer_left_to_right"], "./game_assets/images/timer_unfilled.png");
         timer.appendChild(timer_filled);
@@ -363,7 +365,8 @@ function sleep(milliseconds) {
 }
 function create_div_element(classes, id) {
     const div = document.createElement("div");
-    div.className = classes.join(" ");
+    if (classes)
+        div.className = classes.join(" ");
     if (id)
         div.id = id;
     return div;
@@ -381,13 +384,11 @@ function create_image_element(classes, src, id) {
 }
 function create_skip_timer(time) {
     return __awaiter(this, void 0, void 0, function* () {
-        root.style.setProperty("--large_timer_delay", time + "ms");
-        const timer = create_div_element(["single_timer_large", "content"]);
+        root.style.setProperty("--timer_delay", time + "ms");
+        const timer = create_div_element(["timer"]);
         const timer_filled = create_image_element(["pixelated", "timer_background"], "./game_assets/images/skip_timer_unfilled.png");
         const timer_unfilled = create_image_element(["pixelated", "timer_foreground", "timer_sides_to_center"], "./game_assets/images/skip_timer_filled.png");
-        const text = create_paragraph_element("Press any button, or click anywhere to continue.", [
-            "content",
-        ]);
+        const text = create_paragraph_element("Press any button, or click anywhere to continue.", ["content"]);
         game_content.appendChild(text);
         timer.appendChild(timer_filled);
         timer.appendChild(timer_unfilled);
@@ -419,5 +420,48 @@ function get_promise_from_set_event(item, event) {
             resolve();
         };
         item.addEventListener(event, listener);
+    });
+}
+function create_dual_timers(time, text, amount) {
+    return __awaiter(this, void 0, void 0, function* () {
+        root.style.setProperty("--timer_duration", time + "ms");
+        root.style.setProperty("--sub_timer_duration", time / amount + "ms");
+        root.style.setProperty("--sub_timer_count", amount.toString());
+        const timers = create_div_element(["content"]);
+        const small_timer = create_div_element(["timer"]);
+        const small_timer_text = create_paragraph_element(text + "1/" + amount);
+        const sub_timer_filled = create_image_element(["pixelated", "timer_background", "sub_timer"], "./game_assets/images/small_timer_filled.png");
+        const sub_timer_unfilled = create_image_element(["pixelated", "timer_foreground", "sub_timer", "sub_timer_left_to_right"], "./game_assets/images/small_timer_unfilled.png");
+        small_timer.appendChild(sub_timer_filled);
+        small_timer.appendChild(sub_timer_unfilled);
+        const sub_timer = create_div_element(["sub_timer_div"]);
+        sub_timer.appendChild(small_timer_text);
+        sub_timer.appendChild(small_timer);
+        const timer = create_div_element(["timer"]);
+        const timer_filled = create_image_element(["pixelated", "timer_background"], "./game_assets/images/timer_filled.png");
+        const timer_unfilled = create_image_element(["pixelated", "timer_foreground", "timer_left_to_right"], "./game_assets/images/timer_unfilled.png");
+        timer.appendChild(timer_filled);
+        timer.appendChild(timer_unfilled);
+        timers.appendChild(sub_timer);
+        const spacer = create_div_element(["dual_timer_spacing"]);
+        timers.appendChild(spacer);
+        timers.appendChild(timer);
+        game_content.appendChild(timers);
+        update_sub_timer_paragraph(sub_timer_unfilled, "animationiteration", text, amount, small_timer_text);
+        yield get_promise_from_animation_event(timer_unfilled, "animationend");
+        sleep(200);
+        remove_div_element(timers);
+    });
+}
+function update_sub_timer_paragraph(item, event, text, count, paragraph_element) {
+    return new Promise(() => {
+        let current_count = 1;
+        item.addEventListener(event, function anim_count() {
+            current_count++;
+            paragraph_element.innerText = text + current_count + "/" + count;
+            if (current_count === count) {
+                item.removeEventListener(event, anim_count);
+            }
+        });
     });
 }
