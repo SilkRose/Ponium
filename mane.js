@@ -391,7 +391,7 @@ function create_skip_timer(time) {
         const timer = create_div_element(["timer"]);
         const timer_filled = create_image_element(["pixelated", "timer_background", "skip_timer"], "./game_assets/images/skip_timer_unfilled.png");
         const timer_unfilled = create_image_element(["pixelated", "timer_foreground", "timer_sides_to_center", "skip_timer"], "./game_assets/images/skip_timer_filled.png");
-        const text = create_paragraph_element("Press any button, or click anywhere to continue.", ["content"]);
+        const text = create_paragraph_element("Press any button, or click anywhere to continue.", ["content", "skip_timer_text"]);
         game_content.appendChild(text);
         timer.appendChild(timer_filled);
         timer.appendChild(timer_unfilled);
