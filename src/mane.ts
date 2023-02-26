@@ -51,9 +51,8 @@ const root = document.documentElement;
 window.onload = mane;
 
 async function mane() {
-  await create_timer(4000);
+  await create_timer(3000);
   await create_timer(1000);
-  await create_timer(9000);
   const test_data = characters.pinkie_pie;
   append_element(JSON.stringify(test_data));
   let player = await create_character();
@@ -311,9 +310,7 @@ function on_paste_event_override(input: HTMLInputElement, answer: string) {
 }
 
 function create_text_input_field(button: boolean) {
-  const new_element = document.createElement("div");
-  new_element.id = "input_field";
-  new_element.className = "content";
+  const new_element = create_div_element(["content"], "input_field");
   new_element.appendChild(
     create_text_input_element("input", "Enter response...")
   );
@@ -344,9 +341,7 @@ function create_button_element(id: string, text: string) {
 }
 
 function create_radial_input_field(options: readonly string[]) {
-  const new_element = document.createElement("div");
-  new_element.id = "input_radial";
-  new_element.className = "content";
+  const new_element = create_div_element(["content"], "input_radial");
   new_element.appendChild(create_label_with_radial_element(options[0], true));
   for (let i = 1; i < options.length; i++) {
     new_element.appendChild(create_label_with_radial_element(options[i]));
@@ -378,11 +373,7 @@ function create_radio_element(value: string, checked?: boolean) {
 
 async function create_timer(time: number) {
   root.style.setProperty("--large_timer_delay", time + "ms");
-  const timer = create_div_element([
-    "single_timer_large",
-    "content",
-    "fade_in",
-  ]);
+  const timer = create_div_element(["single_timer_large", "content"]);
   const timer_filled = create_image_element(
     ["pixelated", "timer_filled"],
     "./game_assets/images/timer_filled.png"
@@ -396,7 +387,7 @@ async function create_timer(time: number) {
   game_content.appendChild(timer);
   await get_promise_from_animation_event(timer_unfilled, "animationend");
   sleep(200);
-  await remove_div_element(timer, true);
+  remove_div_element(timer);
 }
 
 function get_promise_from_animation_event(item: Element, event: string) {
@@ -424,11 +415,7 @@ function create_div_element(classes: string[], id?: string) {
   return div;
 }
 
-async function remove_div_element(div: Element, fade_out?: boolean) {
-  if (fade_out) {
-    div.classList.replace("fade_in", "fade_out");
-    await get_promise_from_animation_event(div, "animationend");
-  }
+function remove_div_element(div: HTMLDivElement) {
   game_content.removeChild(div);
 }
 
