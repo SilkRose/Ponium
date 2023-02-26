@@ -150,19 +150,22 @@ main {
   display: block;
 }
 
-.timer_filled {
+.timer_background {
   position: relative;
   width: 100%;
 }
 
-.timer_unfilled {
+.timer_foreground {
   position: absolute;
   width: 100%;
   top: 0;
   left: 0;
   animation-delay: 200ms;
-  animation-name: left_right_progress_bar;
   animation-duration: var(--large_timer_delay);
+}
+
+.timer_left_to_right {
+  animation-name: left_right_progress_bar;
   animation-timing-function: steps(19, jump-none);
 }
 
@@ -172,5 +175,19 @@ main {
   }
   to {
     clip-path: inset(0 0 0 100%);
+  }
+}
+
+.timer_sides_to_center {
+  animation-name: sides_to_center_progress_bar;
+  animation-timing-function: steps(10, jump-none);
+}
+
+@keyframes sides_to_center_progress_bar {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 50% 0 50%);
   }
 }

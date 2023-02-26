@@ -51,6 +51,7 @@ const root = document.documentElement;
 window.onload = mane;
 
 async function mane() {
+  await create_skip_timer(8000);
   await create_timer(3000);
   await create_timer(1000);
   const test_data = characters.pinkie_pie;
@@ -375,11 +376,11 @@ async function create_timer(time: number) {
   root.style.setProperty("--large_timer_delay", time + "ms");
   const timer = create_div_element(["single_timer_large", "content"]);
   const timer_filled = create_image_element(
-    ["pixelated", "timer_filled"],
+    ["pixelated", "timer_background"],
     "./game_assets/images/timer_filled.png"
   );
   const timer_unfilled = create_image_element(
-    ["pixelated", "timer_unfilled"],
+    ["pixelated", "timer_foreground", "timer_left_to_right"],
     "./game_assets/images/timer_unfilled.png"
   );
   timer.appendChild(timer_filled);
@@ -425,4 +426,37 @@ function create_image_element(classes: string[], src: string, id?: string) {
   if (id) img.id = id;
   img.src = src;
   return img;
+}
+
+async function create_skip_timer(time: number) {
+  root.style.setProperty("--large_timer_delay", time + "ms");
+  const timer = create_div_element(["single_timer_large", "content"]);
+  const timer_filled = create_image_element(
+    ["pixelated", "timer_background"],
+    "./game_assets/images/skip_timer_unfilled.png"
+  );
+  const timer_unfilled = create_image_element(
+    ["pixelated", "timer_foreground", "timer_sides_to_center"],
+    "./game_assets/images/skip_timer_filled.png"
+  );
+  const text = create_paragraph_element("Press any button to continue.");
+  //game_content.appendChild(text);
+  timer.appendChild(timer_filled);
+  timer.appendChild(timer_unfilled);
+  game_content.appendChild(timer);
+  await get_promise_from_animation_event(timer_unfilled, "animationend");
+  sleep(200);
+  remove_div_element(timer);
+}
+
+function create_paragraph_element(
+  text: string,
+  classes?: string[],
+  id?: string
+) {
+  const p = document.createElement("p");
+  p.innerText = text;
+  if (classes) p.className = classes.join(" ");
+  if (id) p.id = id;
+  return p;
 }
