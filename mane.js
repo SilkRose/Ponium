@@ -336,22 +336,19 @@ function create_radio_element(value, checked) {
 function create_timer(time) {
     return __awaiter(this, void 0, void 0, function* () {
         root.style.setProperty("--large_timer_delay", time + "ms");
-        const timer = document.createElement("div");
-        timer.className = "single_timer_large content";
-        const timer_filled = document.createElement("img");
-        timer_filled.className = "pixelated timer_filled";
-        timer_filled.src = "./game_assets/images/timer_filled.png";
-        const timer_unfilled = document.createElement("img");
-        timer_unfilled.className = "pixelated timer_unfilled";
-        timer_unfilled.src = "./game_assets/images/timer_unfilled.png";
+        const timer = create_div_element([
+            "single_timer_large",
+            "content",
+            "fade_in",
+        ]);
+        const timer_filled = create_image_element(["pixelated", "timer_filled"], "./game_assets/images/timer_filled.png");
+        const timer_unfilled = create_image_element(["pixelated", "timer_unfilled"], "./game_assets/images/timer_unfilled.png");
         timer.appendChild(timer_filled);
         timer.appendChild(timer_unfilled);
         game_content.appendChild(timer);
         yield get_promise_from_animation_event(timer_unfilled, "animationend");
         sleep(200);
-        timer.classList.add("removing");
-        yield get_promise_from_animation_event(timer, "animationend");
-        game_content.removeChild(timer);
+        yield remove_div_element(timer, true);
     });
 }
 function get_promise_from_animation_event(item, event) {
@@ -369,4 +366,28 @@ function sleep(milliseconds) {
     do {
         current_date = Date.now();
     } while (current_date - date < milliseconds);
+}
+function create_div_element(classes, id) {
+    const div = document.createElement("div");
+    div.className = classes.join(" ");
+    if (id)
+        div.id = id;
+    return div;
+}
+function remove_div_element(div, fade_out) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (fade_out) {
+            div.classList.replace("fade_in", "fade_out");
+            yield get_promise_from_animation_event(div, "animationend");
+        }
+        game_content.removeChild(div);
+    });
+}
+function create_image_element(classes, src, id) {
+    const img = document.createElement("img");
+    img.className = classes.join(" ");
+    if (id)
+        img.id = id;
+    img.src = src;
+    return img;
 }
