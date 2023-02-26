@@ -51,14 +51,16 @@ const root = document.documentElement;
 window.onload = mane;
 
 async function mane() {
-  await create_skip_timer(8000);
+  await create_skip_timer(5000);
   await create_timer(3000);
   await create_timer(1000);
   const test_data = characters.pinkie_pie;
   append_element(JSON.stringify(test_data));
   let player = await create_character();
+  await create_skip_timer(5000);
   append_element(player.name);
   append_element(player.age.toString());
+  await create_skip_timer(5000);
   append_element(player.species.race.toString());
   if (player.species.race === "Pony") {
     append_element(player.species.sub_race.toString());
@@ -439,13 +441,19 @@ async function create_skip_timer(time: number) {
     ["pixelated", "timer_foreground", "timer_sides_to_center"],
     "./game_assets/images/skip_timer_filled.png"
   );
-  const text = create_paragraph_element("Press any button to continue.");
-  //game_content.appendChild(text);
+  const text = create_paragraph_element("Press any button to continue.", [
+    "content",
+  ]);
+  game_content.appendChild(text);
   timer.appendChild(timer_filled);
   timer.appendChild(timer_unfilled);
   game_content.appendChild(timer);
-  await get_promise_from_animation_event(timer_unfilled, "animationend");
+  await Promise.race([
+    get_promise_from_animation_event(timer_unfilled, "animationend"),
+    get_promise_from_keydown_event(document.body, "keydown"),
+  ]);
   sleep(200);
+  remove_div_element(text);
   remove_div_element(timer);
 }
 
@@ -459,4 +467,15 @@ function create_paragraph_element(
   if (classes) p.className = classes.join(" ");
   if (id) p.id = id;
   return p;
+}
+
+function get_promise_from_keydown_event(item: HTMLElement, event: string) {
+  return new Promise<void>((resolve) => {
+    const listener = (key: any) => {
+      key.preventDefault();
+      item.removeEventListener(event, listener);
+      resolve();
+    };
+    item.addEventListener(event, listener);
+  });
 }
