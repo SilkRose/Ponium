@@ -1,5 +1,7 @@
 :root {
-  --large_timer_delay: 4500ms;
+  --timer_duration: 0ms;
+  --sub_timer_duration: 0ms;
+  --sub_timer_count: 0;
 }
 
 * {
@@ -72,6 +74,7 @@ main {
   padding: 0.5rem;
 }
 
+.sub_timer_div,
 #input_radial {
   display: flex;
   flex-wrap: wrap;
@@ -142,12 +145,13 @@ main {
   image-rendering: pixelated;
 }
 
-.single_timer_large {
+.timer {
   position: relative;
   padding: 0;
+  animation: fade 150ms ease-in-out;
 }
 
-.single_timer_large > img {
+.timer > img {
   display: block;
 }
 
@@ -161,13 +165,32 @@ main {
   width: 100%;
   top: 0;
   left: 0;
-  animation-delay: 200ms;
-  animation-duration: var(--large_timer_delay);
+  animation-timing-function: linear;
+  animation-duration: var(--timer_duration);
+}
+
+.dual_timer_spacing {
+  height: 1rem;
+}
+
+.sub_timer_div {
+  justify-content: right;
+}
+
+.sub_timer_div > .timer {
+  width: 50%;
 }
 
 .timer_left_to_right {
   animation-name: left_right_progress_bar;
   animation-timing-function: steps(19, jump-none);
+}
+
+.sub_timer_left_to_right {
+  animation-name: left_right_progress_bar;
+  animation-timing-function: steps(10, jump-none);
+  animation-iteration-count: var(--sub_timer_count);
+  animation-duration: var(--sub_timer_duration);
 }
 
 @keyframes left_right_progress_bar {
