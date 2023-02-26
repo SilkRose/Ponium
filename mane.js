@@ -31,6 +31,7 @@ const root = document.documentElement;
 window.onload = mane;
 function mane() {
     return __awaiter(this, void 0, void 0, function* () {
+        yield create_skip_timer(8000);
         yield create_timer(3000);
         yield create_timer(1000);
         const test_data = characters.pinkie_pie;
@@ -332,8 +333,8 @@ function create_timer(time) {
     return __awaiter(this, void 0, void 0, function* () {
         root.style.setProperty("--large_timer_delay", time + "ms");
         const timer = create_div_element(["single_timer_large", "content"]);
-        const timer_filled = create_image_element(["pixelated", "timer_filled"], "./game_assets/images/timer_filled.png");
-        const timer_unfilled = create_image_element(["pixelated", "timer_unfilled"], "./game_assets/images/timer_unfilled.png");
+        const timer_filled = create_image_element(["pixelated", "timer_background"], "./game_assets/images/timer_filled.png");
+        const timer_unfilled = create_image_element(["pixelated", "timer_foreground", "timer_left_to_right"], "./game_assets/images/timer_unfilled.png");
         timer.appendChild(timer_filled);
         timer.appendChild(timer_unfilled);
         game_content.appendChild(timer);
@@ -375,4 +376,29 @@ function create_image_element(classes, src, id) {
         img.id = id;
     img.src = src;
     return img;
+}
+function create_skip_timer(time) {
+    return __awaiter(this, void 0, void 0, function* () {
+        root.style.setProperty("--large_timer_delay", time + "ms");
+        const timer = create_div_element(["single_timer_large", "content"]);
+        const timer_filled = create_image_element(["pixelated", "timer_background"], "./game_assets/images/skip_timer_unfilled.png");
+        const timer_unfilled = create_image_element(["pixelated", "timer_foreground", "timer_sides_to_center"], "./game_assets/images/skip_timer_filled.png");
+        const text = create_paragraph_element("Press any button to continue.");
+        //game_content.appendChild(text);
+        timer.appendChild(timer_filled);
+        timer.appendChild(timer_unfilled);
+        game_content.appendChild(timer);
+        yield get_promise_from_animation_event(timer_unfilled, "animationend");
+        sleep(200);
+        remove_div_element(timer);
+    });
+}
+function create_paragraph_element(text, classes, id) {
+    const p = document.createElement("p");
+    p.innerText = text;
+    if (classes)
+        p.className = classes.join(" ");
+    if (id)
+        p.id = id;
+    return p;
 }
