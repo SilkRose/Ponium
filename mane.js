@@ -331,11 +331,7 @@ function create_radio_element(value, checked) {
 function create_timer(time) {
     return __awaiter(this, void 0, void 0, function* () {
         root.style.setProperty("--large_timer_delay", time + "ms");
-        const timer = create_div_element([
-            "single_timer_large",
-            "content",
-            "fade_in",
-        ]);
+        const timer = create_div_element(["single_timer_large", "content"]);
         const timer_filled = create_image_element(["pixelated", "timer_filled"], "./game_assets/images/timer_filled.png");
         const timer_unfilled = create_image_element(["pixelated", "timer_unfilled"], "./game_assets/images/timer_unfilled.png");
         timer.appendChild(timer_filled);
