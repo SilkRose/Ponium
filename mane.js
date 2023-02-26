@@ -31,14 +31,16 @@ const root = document.documentElement;
 window.onload = mane;
 function mane() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield create_skip_timer(8000);
+        yield create_skip_timer(5000);
         yield create_timer(3000);
         yield create_timer(1000);
         const test_data = characters.pinkie_pie;
         append_element(JSON.stringify(test_data));
         let player = yield create_character();
+        yield create_skip_timer(5000);
         append_element(player.name);
         append_element(player.age.toString());
+        yield create_skip_timer(5000);
         append_element(player.species.race.toString());
         if (player.species.race === "Pony") {
             append_element(player.species.sub_race.toString());
@@ -383,13 +385,19 @@ function create_skip_timer(time) {
         const timer = create_div_element(["single_timer_large", "content"]);
         const timer_filled = create_image_element(["pixelated", "timer_background"], "./game_assets/images/skip_timer_unfilled.png");
         const timer_unfilled = create_image_element(["pixelated", "timer_foreground", "timer_sides_to_center"], "./game_assets/images/skip_timer_filled.png");
-        const text = create_paragraph_element("Press any button to continue.");
-        //game_content.appendChild(text);
+        const text = create_paragraph_element("Press any button to continue.", [
+            "content",
+        ]);
+        game_content.appendChild(text);
         timer.appendChild(timer_filled);
         timer.appendChild(timer_unfilled);
         game_content.appendChild(timer);
-        yield get_promise_from_animation_event(timer_unfilled, "animationend");
+        yield Promise.race([
+            get_promise_from_animation_event(timer_unfilled, "animationend"),
+            get_promise_from_keydown_event(document.body, "keydown"),
+        ]);
         sleep(200);
+        remove_div_element(text);
         remove_div_element(timer);
     });
 }
@@ -401,4 +409,14 @@ function create_paragraph_element(text, classes, id) {
     if (id)
         p.id = id;
     return p;
+}
+function get_promise_from_keydown_event(item, event) {
+    return new Promise((resolve) => {
+        const listener = (key) => {
+            key.preventDefault();
+            item.removeEventListener(event, listener);
+            resolve();
+        };
+        item.addEventListener(event, listener);
+    });
 }

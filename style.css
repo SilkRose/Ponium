@@ -144,6 +144,7 @@ main {
 
 .single_timer_large {
   position: relative;
+  padding: 0;
 }
 
 .single_timer_large > img {
