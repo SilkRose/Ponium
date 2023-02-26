@@ -448,7 +448,7 @@ async function create_skip_timer(time: number) {
   );
   const text = create_paragraph_element(
     "Press any button, or click anywhere to continue.",
-    ["content"]
+    ["content", "skip_timer_text"]
   );
   game_content.appendChild(text);
   timer.appendChild(timer_filled);

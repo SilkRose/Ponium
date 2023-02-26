@@ -216,7 +216,23 @@ main {
   }
 }
 
+.skip_timer_text {
+  padding-bottom: 0.75rem;
+}
+
 @media (max-width: 450px) {
+  #game_content {
+    padding: 1rem;
+  }
+
+  .content {
+    padding: 0.25rem 0;
+  }
+
+  .dual_timer_spacing {
+    height: 0.75rem;
+  }
+
   .sub_timer_div {
     justify-content: center;
   }
