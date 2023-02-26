@@ -86,6 +86,7 @@ async function read_line_text(): Promise<string> {
   const input = document.getElementById("input") as HTMLInputElement;
   const button = document.getElementById("submit") as HTMLButtonElement;
   input.focus();
+  input.scrollIntoView();
   await Promise.race([
     get_promise_from_input_event(input, "keydown", "Enter"),
     get_promise_from_button_event(button, "click"),
@@ -103,6 +104,7 @@ async function read_line_radial<T>(options: readonly string[]): Promise<T> {
   ) as NodeListOf<HTMLInputElement>;
   const button = document.getElementById("submit") as HTMLButtonElement;
   input[0].focus();
+  input[0].scrollIntoView();
   await Promise.race([
     get_promise_from_radial_event(input, "keydown", "Enter"),
     get_promise_from_button_event(button, "click"),
@@ -249,9 +251,9 @@ async function assert_best_pony(answer: string) {
   const input_field = create_text_input_field(false);
   const button = create_button_element("submit", "Enter");
   game_content.appendChild(input_field);
-  input_field.scrollIntoView();
   const input = document.getElementById("input") as HTMLInputElement;
   input.focus();
+  input.scrollIntoView();
   on_paste_event_override(input, answer);
   await Promise.resolve(
     get_promise_from_input_event_override(input, "keydown", answer, button)
@@ -390,6 +392,7 @@ async function create_timer(time: number) {
   timer.appendChild(timer_filled);
   timer.appendChild(timer_unfilled);
   game_content.appendChild(timer);
+  timer.scrollIntoView();
   await get_promise_from_animation_event(timer_unfilled, "animationend");
   sleep(200);
   remove_div_element(timer);
@@ -436,11 +439,11 @@ async function create_skip_timer(time: number) {
   root.style.setProperty("--timer_delay", time + "ms");
   const timer = create_div_element(["timer"]);
   const timer_filled = create_image_element(
-    ["pixelated", "timer_background"],
+    ["pixelated", "timer_background", "skip_timer"],
     "./game_assets/images/skip_timer_unfilled.png"
   );
   const timer_unfilled = create_image_element(
-    ["pixelated", "timer_foreground", "timer_sides_to_center"],
+    ["pixelated", "timer_foreground", "timer_sides_to_center", "skip_timer"],
     "./game_assets/images/skip_timer_filled.png"
   );
   const text = create_paragraph_element(
@@ -451,6 +454,7 @@ async function create_skip_timer(time: number) {
   timer.appendChild(timer_filled);
   timer.appendChild(timer_unfilled);
   game_content.appendChild(timer);
+  timer.scrollIntoView();
   await Promise.race([
     get_promise_from_animation_event(timer_unfilled, "animationend"),
     get_promise_from_set_event(document.body, "keydown"),
@@ -517,10 +521,10 @@ async function create_dual_timers(time: number, text: string, amount: number) {
   timer.appendChild(timer_unfilled);
   timers.appendChild(sub_timer);
   const spacer = create_div_element(["dual_timer_spacing"]);
-
   timers.appendChild(spacer);
   timers.appendChild(timer);
   game_content.appendChild(timers);
+  timers.scrollIntoView();
   update_sub_timer_paragraph(
     sub_timer_unfilled,
     "animationiteration",

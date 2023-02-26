@@ -215,3 +215,30 @@ main {
     clip-path: inset(0 50% 0 50%);
   }
 }
+
+@media (max-width: 400px) {
+  .sub_timer_div {
+    justify-content: center;
+  }
+  .sub_timer_div > .timer {
+    width: 100%;
+  }
+  .timer_left_to_right {
+    animation-timing-function: steps(10, jump-none);
+  }
+  .timer_background:not(.sub_timer, .skip_timer) {
+    content: url("./game_assets/images/small_timer_filled.png");
+  }
+  .timer_foreground:not(.sub_timer, .skip_timer) {
+    content: url("./game_assets/images/small_timer_unfilled.png");
+  }
+  .timer_sides_to_center {
+    animation-timing-function: steps(5, jump-none);
+  }
+  .skip_timer.timer_background {
+    content: url("./game_assets/images/small_skip_timer_filled.png");
+  }
+  .skip_timer.timer_foreground {
+    content: url("./game_assets/images/small_skip_timer_unfilled.png");
+  }
+}
