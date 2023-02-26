@@ -31,9 +31,8 @@ const root = document.documentElement;
 window.onload = mane;
 function mane() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield create_timer(4000);
+        yield create_timer(3000);
         yield create_timer(1000);
-        yield create_timer(9000);
         const test_data = characters.pinkie_pie;
         append_element(JSON.stringify(test_data));
         let player = yield create_character();
@@ -279,9 +278,7 @@ function on_paste_event_override(input, answer) {
     });
 }
 function create_text_input_field(button) {
-    const new_element = document.createElement("div");
-    new_element.id = "input_field";
-    new_element.className = "content";
+    const new_element = create_div_element(["content"], "input_field");
     new_element.appendChild(create_text_input_element("input", "Enter response..."));
     if (button) {
         new_element.appendChild(create_button_element("submit", "Enter"));
@@ -304,9 +301,7 @@ function create_button_element(id, text) {
     return button;
 }
 function create_radial_input_field(options) {
-    const new_element = document.createElement("div");
-    new_element.id = "input_radial";
-    new_element.className = "content";
+    const new_element = create_div_element(["content"], "input_radial");
     new_element.appendChild(create_label_with_radial_element(options[0], true));
     for (let i = 1; i < options.length; i++) {
         new_element.appendChild(create_label_with_radial_element(options[i]));
@@ -348,7 +343,7 @@ function create_timer(time) {
         game_content.appendChild(timer);
         yield get_promise_from_animation_event(timer_unfilled, "animationend");
         sleep(200);
-        yield remove_div_element(timer, true);
+        remove_div_element(timer);
     });
 }
 function get_promise_from_animation_event(item, event) {
@@ -374,14 +369,8 @@ function create_div_element(classes, id) {
         div.id = id;
     return div;
 }
-function remove_div_element(div, fade_out) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (fade_out) {
-            div.classList.replace("fade_in", "fade_out");
-            yield get_promise_from_animation_event(div, "animationend");
-        }
-        game_content.removeChild(div);
-    });
+function remove_div_element(div) {
+    game_content.removeChild(div);
 }
 function create_image_element(classes, src, id) {
     const img = document.createElement("img");

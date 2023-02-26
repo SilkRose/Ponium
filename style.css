@@ -40,13 +40,9 @@ main {
   padding-bottom: 0;
 }
 
-.fade_in {
+.content {
+  padding: 0.5rem 0rem;
   animation: fade 250ms ease-in;
-}
-
-.fade_out {
-  animation: fade 5s ease-in;
-  animation-direction: reverse;
 }
 
 @keyframes fade {
@@ -56,10 +52,6 @@ main {
   to {
     opacity: 1;
   }
-}
-
-.content {
-  padding: 0.5rem 0rem;
 }
 
 #input_field {
