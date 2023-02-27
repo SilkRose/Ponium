@@ -52,6 +52,12 @@ type RaceEvent = {
   condition?: (event: any) => boolean;
 };
 
+enum InputType {
+  text = "text",
+  number = "number",
+  radio = "radio",
+}
+
 const game_content = document.getElementById("game_content")!;
 const root = document.documentElement;
 
@@ -86,8 +92,8 @@ function append_element(element: string) {
   new_element.scrollIntoView();
 }
 
-async function read_line_text(): Promise<string> {
-  const input_field = create_text_input_field(true);
+async function read_line_text(type: InputType): Promise<string> {
+  const input_field = create_text_input_field(type, true);
   game_content.appendChild(input_field);
   input_field.scrollIntoView();
   const input = document.getElementById("input") as HTMLInputElement;
@@ -182,7 +188,7 @@ async function create_character() {
 
 async function get_name(): Promise<string> {
   append_element("What is your name?");
-  let name = await read_line_text();
+  let name = await read_line_text(InputType.text);
   if (name.length >= 2 && name.length <= 32) {
     return name;
   } else {
@@ -193,7 +199,7 @@ async function get_name(): Promise<string> {
 
 async function get_age(): Promise<number> {
   append_element("How old are you?");
-  let age = parseInt(await read_line_text());
+  let age = parseInt(await read_line_text(InputType.number));
   if (age >= 18 && age <= 100) {
     return age;
   } else {
@@ -239,7 +245,7 @@ async function get_best_pony() {
 }
 
 async function assert_best_pony(answer: string) {
-  const input_field = create_text_input_field(false);
+  const input_field = create_text_input_field(InputType.text, false);
   const button = create_button_element("submit", "Enter");
   game_content.appendChild(input_field);
   const input = document.getElementById("input") as HTMLInputElement;
@@ -307,10 +313,10 @@ function on_paste_event_override(input: HTMLInputElement, answer: string) {
   });
 }
 
-function create_text_input_field(button: boolean) {
+function create_text_input_field(type: string, button: boolean) {
   const new_element = create_div_element(["content"], "input_field");
   new_element.appendChild(
-    create_text_input_element("input", "Enter response...")
+    create_text_input_element("input", InputType.text, "Enter response...")
   );
   if (button) {
     new_element.appendChild(create_button_element("submit", "Enter"));
@@ -320,11 +326,12 @@ function create_text_input_field(button: boolean) {
 
 function create_text_input_element(
   id: string,
+  type: InputType,
   placeholder: string,
   value?: string
 ) {
   const input = document.createElement("input");
-  input.type = "text";
+  input.type = type;
   input.id = id;
   input.placeholder = placeholder;
   if (value) input.value = value;
@@ -362,7 +369,7 @@ function create_label_element(text: string) {
 
 function create_radio_element(value: string, checked?: boolean) {
   const radio = document.createElement("input");
-  radio.type = "radio";
+  radio.type = InputType.radio;
   radio.name = "radial";
   radio.value = value;
   if (checked) radio.checked = true;
