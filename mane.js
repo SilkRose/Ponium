@@ -69,7 +69,13 @@ function read_line_text() {
         input.scrollIntoView();
         yield Promise.race([
             get_promise_from_input_event(input, "keydown", "Enter"),
-            get_promise_from_button_event(button, "click"),
+            race_events([
+                {
+                    elem: button,
+                    event: "click",
+                    prevent_default: false,
+                },
+            ]),
         ]);
         game_content.removeChild(game_content.lastChild);
         return input.value.trim();
@@ -86,7 +92,13 @@ function read_line_radial(options) {
         input[0].scrollIntoView();
         yield Promise.race([
             get_promise_from_radial_event(input, "keydown", "Enter"),
-            get_promise_from_button_event(button, "click"),
+            race_events([
+                {
+                    elem: button,
+                    event: "click",
+                    prevent_default: false,
+                },
+            ]),
         ]);
         const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
         game_content.removeChild(game_content.lastChild);
@@ -99,41 +111,23 @@ function read_line_radial(options) {
     });
 }
 function get_promise_from_input_event(item, event, required_key) {
-    return new Promise((resolve) => {
-        const listener = () => {
-            item.onkeydown = function (key) {
-                if (key.key === required_key) {
-                    item.removeEventListener(event, listener);
-                    resolve();
-                }
-            };
-        };
-        item.addEventListener(event, listener);
-    });
-}
-function get_promise_from_button_event(item, event) {
-    return new Promise((resolve) => {
-        const listener = () => {
-            item.removeEventListener(event, listener);
-            resolve();
-        };
-        item.addEventListener(event, listener);
-    });
+    return race_events([
+        {
+            elem: item,
+            event: event,
+            condition: (event) => event.key === required_key,
+        },
+    ]);
 }
 function get_promise_from_radial_event(items, event, required_key) {
-    return new Promise((resolve) => {
-        const listener = () => {
-            self.onkeydown = function (key) {
-                if (key.key === required_key) {
-                    self.removeEventListener(event, listener);
-                    resolve();
-                }
-            };
+    const events = Array.from(items).map((item) => {
+        return {
+            elem: item,
+            event: event,
+            condition: (event) => event.key === required_key,
         };
-        for (let item of items) {
-            item.addEventListener(event, listener);
-        }
     });
+    return race_events(events);
 }
 function capitalize_string(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -345,18 +339,14 @@ function create_timer(time) {
         timer.appendChild(timer_unfilled);
         game_content.appendChild(timer);
         timer.scrollIntoView();
-        yield get_promise_from_animation_event(timer_unfilled, "animationend");
+        yield race_events([
+            {
+                elem: timer_unfilled,
+                event: "animationend",
+            },
+        ]);
         sleep(200);
         remove_div_element(timer);
-    });
-}
-function get_promise_from_animation_event(item, event) {
-    return new Promise((resolve) => {
-        const listener = () => {
-            item.removeEventListener(event, listener);
-            resolve();
-        };
-        item.addEventListener(event, listener);
     });
 }
 function sleep(milliseconds) {
@@ -397,10 +387,21 @@ function create_skip_timer(time) {
         timer.appendChild(timer_unfilled);
         game_content.appendChild(timer);
         timer.scrollIntoView();
-        yield Promise.race([
-            get_promise_from_animation_event(timer_unfilled, "animationend"),
-            get_promise_from_set_event(document.body, "keydown"),
-            get_promise_from_set_event(document.body, "click"),
+        yield race_events([
+            {
+                elem: timer_unfilled,
+                event: "animationend",
+            },
+            {
+                elem: document.body,
+                event: "keydown",
+                prevent_default: true,
+            },
+            {
+                elem: document.body,
+                event: "click",
+                prevent_default: true,
+            },
         ]);
         sleep(200);
         remove_div_element(text);
@@ -415,16 +416,6 @@ function create_paragraph_element(text, classes, id) {
     if (id)
         p.id = id;
     return p;
-}
-function get_promise_from_set_event(item, event) {
-    return new Promise((resolve) => {
-        const listener = (set_event) => {
-            set_event.preventDefault();
-            item.removeEventListener(event, listener);
-            resolve();
-        };
-        item.addEventListener(event, listener);
-    });
 }
 function create_dual_timers(time, text, amount) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -453,7 +444,12 @@ function create_dual_timers(time, text, amount) {
         game_content.appendChild(timers);
         timers.scrollIntoView();
         update_sub_timer_paragraph(sub_timer_unfilled, "animationiteration", text, amount, small_timer_text);
-        yield get_promise_from_animation_event(timer_unfilled, "animationend");
+        yield race_events([
+            {
+                elem: timer_unfilled,
+                event: "animationend",
+            },
+        ]);
         sleep(200);
         remove_div_element(timers);
     });
@@ -468,5 +464,24 @@ function update_sub_timer_paragraph(item, event, text, count, paragraph_element)
                 item.removeEventListener(event, anim_count);
             }
         });
+    });
+}
+function race_events(events) {
+    return new Promise((res) => {
+        let done = false;
+        let events_and_listeners = events.map((e) => {
+            let listener = (event) => global_listener(e, event);
+            e.elem.addEventListener(e.event, listener);
+            return [e, listener];
+        });
+        function global_listener(race_event, event) {
+            if (done)
+                return;
+            if (race_event.condition && !race_event.condition(event))
+                return;
+            done = true;
+            events_and_listeners.forEach(([e, listener]) => e.elem.removeEventListener(e.event, listener));
+            res();
+        }
     });
 }
