@@ -45,6 +45,13 @@ type Character = {
   inventory: "";
 };
 
+type RaceEvent = {
+  elem: HTMLElement;
+  event: keyof HTMLElementEventMap;
+  prevent_default?: boolean;
+  condition?: (event: any) => boolean;
+};
+
 const game_content = document.getElementById("game_content")!;
 const root = document.documentElement;
 
@@ -89,7 +96,13 @@ async function read_line_text(): Promise<string> {
   input.scrollIntoView();
   await Promise.race([
     get_promise_from_input_event(input, "keydown", "Enter"),
-    get_promise_from_button_event(button, "click"),
+    race_events([
+      {
+        elem: button,
+        event: "click",
+        prevent_default: false,
+      },
+    ]),
   ]);
   game_content.removeChild(game_content.lastChild!);
   return input.value.trim();
@@ -107,7 +120,13 @@ async function read_line_radial<T>(options: readonly string[]): Promise<T> {
   input[0].scrollIntoView();
   await Promise.race([
     get_promise_from_radial_event(input, "keydown", "Enter"),
-    get_promise_from_button_event(button, "click"),
+    race_events([
+      {
+        elem: button,
+        event: "click",
+        prevent_default: false,
+      },
+    ]),
   ]);
   const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
   game_content.removeChild(game_content.lastChild!);
@@ -123,27 +142,13 @@ function get_promise_from_input_event(
   event: string,
   required_key: string
 ) {
-  return new Promise<void>((resolve) => {
-    const listener = () => {
-      item.onkeydown = function (key) {
-        if (key.key === required_key) {
-          item.removeEventListener(event, listener);
-          resolve();
-        }
-      };
-    };
-    item.addEventListener(event, listener);
-  });
-}
-
-function get_promise_from_button_event(item: HTMLButtonElement, event: string) {
-  return new Promise<void>((resolve) => {
-    const listener = () => {
-      item.removeEventListener(event, listener);
-      resolve();
-    };
-    item.addEventListener(event, listener);
-  });
+  return race_events([
+    {
+      elem: item,
+      event: event as any,
+      condition: (event) => event.key === required_key,
+    },
+  ]);
 }
 
 function get_promise_from_radial_event(
@@ -151,19 +156,14 @@ function get_promise_from_radial_event(
   event: string,
   required_key: string
 ) {
-  return new Promise<void>((resolve) => {
-    const listener = () => {
-      self.onkeydown = function (key) {
-        if (key.key === required_key) {
-          self.removeEventListener(event, listener);
-          resolve();
-        }
-      };
+  const events = Array.from(items).map((item) => {
+    return {
+      elem: item,
+      event: event as any,
+      condition: (event: { key: string }) => event.key === required_key,
     };
-    for (let item of items) {
-      item.addEventListener(event, listener);
-    }
   });
+  return race_events(events);
 }
 
 function capitalize_string(string: string) {
@@ -393,19 +393,14 @@ async function create_timer(time: number) {
   timer.appendChild(timer_unfilled);
   game_content.appendChild(timer);
   timer.scrollIntoView();
-  await get_promise_from_animation_event(timer_unfilled, "animationend");
+  await race_events([
+    {
+      elem: timer_unfilled,
+      event: "animationend",
+    },
+  ]);
   sleep(200);
   remove_div_element(timer);
-}
-
-function get_promise_from_animation_event(item: Element, event: string) {
-  return new Promise<void>((resolve) => {
-    const listener = () => {
-      item.removeEventListener(event, listener);
-      resolve();
-    };
-    item.addEventListener(event, listener);
-  });
 }
 
 function sleep(milliseconds: number) {
@@ -455,10 +450,21 @@ async function create_skip_timer(time: number) {
   timer.appendChild(timer_unfilled);
   game_content.appendChild(timer);
   timer.scrollIntoView();
-  await Promise.race([
-    get_promise_from_animation_event(timer_unfilled, "animationend"),
-    get_promise_from_set_event(document.body, "keydown"),
-    get_promise_from_set_event(document.body, "click"),
+  await race_events([
+    {
+      elem: timer_unfilled,
+      event: "animationend",
+    },
+    {
+      elem: document.body,
+      event: "keydown",
+      prevent_default: true,
+    },
+    {
+      elem: document.body,
+      event: "click",
+      prevent_default: true,
+    },
   ]);
   sleep(200);
   remove_div_element(text);
@@ -475,17 +481,6 @@ function create_paragraph_element(
   if (classes) p.className = classes.join(" ");
   if (id) p.id = id;
   return p;
-}
-
-function get_promise_from_set_event(item: HTMLElement, event: string) {
-  return new Promise<void>((resolve) => {
-    const listener = (set_event: any) => {
-      set_event.preventDefault();
-      item.removeEventListener(event, listener);
-      resolve();
-    };
-    item.addEventListener(event, listener);
-  });
 }
 
 async function create_dual_timers(time: number, text: string, amount: number) {
@@ -532,7 +527,12 @@ async function create_dual_timers(time: number, text: string, amount: number) {
     amount,
     small_timer_text
   );
-  await get_promise_from_animation_event(timer_unfilled, "animationend");
+  await race_events([
+    {
+      elem: timer_unfilled,
+      event: "animationend",
+    },
+  ]);
   sleep(200);
   remove_div_element(timers);
 }
@@ -553,5 +553,28 @@ function update_sub_timer_paragraph(
         item.removeEventListener(event, anim_count);
       }
     });
+  });
+}
+
+function race_events(events: Array<RaceEvent>) {
+  return new Promise<void>((res) => {
+    let done = false;
+
+    let events_and_listeners = events.map((e) => {
+      let listener = (event: any) => global_listener(e, event);
+      e.elem.addEventListener(e.event, listener);
+      return [e, listener] as const;
+    });
+
+    function global_listener(race_event: RaceEvent, event: any) {
+      if (done) return;
+      if (race_event.condition && !race_event.condition(event)) return;
+
+      done = true;
+      events_and_listeners.forEach(([e, listener]) =>
+        e.elem.removeEventListener(e.event, listener)
+      );
+      res();
+    }
   });
 }
