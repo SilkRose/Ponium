@@ -26,6 +26,12 @@ const genders = [
     "Agender",
     "Other",
 ];
+var InputType;
+(function (InputType) {
+    InputType["text"] = "text";
+    InputType["number"] = "number";
+    InputType["radio"] = "radio";
+})(InputType || (InputType = {}));
 const game_content = document.getElementById("game_content");
 const root = document.documentElement;
 window.onload = mane;
@@ -58,9 +64,9 @@ function append_element(element) {
     game_content.appendChild(new_element);
     new_element.scrollIntoView();
 }
-function read_line_text() {
+function read_line_text(type) {
     return __awaiter(this, void 0, void 0, function* () {
-        const input_field = create_text_input_field(true);
+        const input_field = create_text_input_field(type, true);
         game_content.appendChild(input_field);
         input_field.scrollIntoView();
         const input = document.getElementById("input");
@@ -145,7 +151,7 @@ function create_character() {
 function get_name() {
     return __awaiter(this, void 0, void 0, function* () {
         append_element("What is your name?");
-        let name = yield read_line_text();
+        let name = yield read_line_text(InputType.text);
         if (name.length >= 2 && name.length <= 32) {
             return name;
         }
@@ -158,7 +164,7 @@ function get_name() {
 function get_age() {
     return __awaiter(this, void 0, void 0, function* () {
         append_element("How old are you?");
-        let age = parseInt(yield read_line_text());
+        let age = parseInt(yield read_line_text(InputType.number));
         if (age >= 18 && age <= 100) {
             return age;
         }
@@ -208,7 +214,7 @@ function get_best_pony() {
 }
 function assert_best_pony(answer) {
     return __awaiter(this, void 0, void 0, function* () {
-        const input_field = create_text_input_field(false);
+        const input_field = create_text_input_field(InputType.text, false);
         const button = create_button_element("submit", "Enter");
         game_content.appendChild(input_field);
         const input = document.getElementById("input");
@@ -269,17 +275,17 @@ function on_paste_event_override(input, answer) {
         }
     });
 }
-function create_text_input_field(button) {
+function create_text_input_field(type, button) {
     const new_element = create_div_element(["content"], "input_field");
-    new_element.appendChild(create_text_input_element("input", "Enter response..."));
+    new_element.appendChild(create_text_input_element("input", InputType.text, "Enter response..."));
     if (button) {
         new_element.appendChild(create_button_element("submit", "Enter"));
     }
     return new_element;
 }
-function create_text_input_element(id, placeholder, value) {
+function create_text_input_element(id, type, placeholder, value) {
     const input = document.createElement("input");
-    input.type = "text";
+    input.type = type;
     input.id = id;
     input.placeholder = placeholder;
     if (value)
@@ -313,7 +319,7 @@ function create_label_element(text) {
 }
 function create_radio_element(value, checked) {
     const radio = document.createElement("input");
-    radio.type = "radio";
+    radio.type = InputType.radio;
     radio.name = "radial";
     radio.value = value;
     if (checked)
