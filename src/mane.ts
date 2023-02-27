@@ -94,15 +94,12 @@ async function read_line_text(): Promise<string> {
   const button = document.getElementById("submit") as HTMLButtonElement;
   input.focus();
   input.scrollIntoView();
-  await Promise.race([
+  await race_events([
+    {
+      elem: button,
+      event: "click",
+    },
     get_promise_from_input_event(input, "keydown", "Enter"),
-    race_events([
-      {
-        elem: button,
-        event: "click",
-        prevent_default: false,
-      },
-    ]),
   ]);
   game_content.removeChild(game_content.lastChild!);
   return input.value.trim();
@@ -118,15 +115,12 @@ async function read_line_radial<T>(options: readonly string[]): Promise<T> {
   const button = document.getElementById("submit") as HTMLButtonElement;
   input[0].focus();
   input[0].scrollIntoView();
-  await Promise.race([
-    get_promise_from_radial_event(input, "keydown", "Enter"),
-    race_events([
-      {
-        elem: button,
-        event: "click",
-        prevent_default: false,
-      },
-    ]),
+  await race_events([
+    {
+      elem: button,
+      event: "click",
+    },
+    ...get_promise_from_radial_event(input, "keydown", "Enter"),
   ]);
   const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
   game_content.removeChild(game_content.lastChild!);
@@ -142,13 +136,11 @@ function get_promise_from_input_event(
   event: string,
   required_key: string
 ) {
-  return race_events([
-    {
-      elem: item,
-      event: event as any,
-      condition: (event) => event.key === required_key,
-    },
-  ]);
+  return {
+    elem: item,
+    event: event as any,
+    condition: (event: { key: string }) => event.key === required_key,
+  };
 }
 
 function get_promise_from_radial_event(
@@ -156,14 +148,13 @@ function get_promise_from_radial_event(
   event: string,
   required_key: string
 ) {
-  const events = Array.from(items).map((item) => {
+  return Array.from(items).map((item) => {
     return {
       elem: item,
       event: event as any,
       condition: (event: { key: string }) => event.key === required_key,
     };
   });
-  return race_events(events);
 }
 
 function capitalize_string(string: string) {
