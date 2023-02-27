@@ -67,15 +67,12 @@ function read_line_text() {
         const button = document.getElementById("submit");
         input.focus();
         input.scrollIntoView();
-        yield Promise.race([
+        yield race_events([
+            {
+                elem: button,
+                event: "click",
+            },
             get_promise_from_input_event(input, "keydown", "Enter"),
-            race_events([
-                {
-                    elem: button,
-                    event: "click",
-                    prevent_default: false,
-                },
-            ]),
         ]);
         game_content.removeChild(game_content.lastChild);
         return input.value.trim();
@@ -90,15 +87,12 @@ function read_line_radial(options) {
         const button = document.getElementById("submit");
         input[0].focus();
         input[0].scrollIntoView();
-        yield Promise.race([
-            get_promise_from_radial_event(input, "keydown", "Enter"),
-            race_events([
-                {
-                    elem: button,
-                    event: "click",
-                    prevent_default: false,
-                },
-            ]),
+        yield race_events([
+            {
+                elem: button,
+                event: "click",
+            },
+            ...get_promise_from_radial_event(input, "keydown", "Enter"),
         ]);
         const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
         game_content.removeChild(game_content.lastChild);
@@ -111,23 +105,20 @@ function read_line_radial(options) {
     });
 }
 function get_promise_from_input_event(item, event, required_key) {
-    return race_events([
-        {
-            elem: item,
-            event: event,
-            condition: (event) => event.key === required_key,
-        },
-    ]);
+    return {
+        elem: item,
+        event: event,
+        condition: (event) => event.key === required_key,
+    };
 }
 function get_promise_from_radial_event(items, event, required_key) {
-    const events = Array.from(items).map((item) => {
+    return Array.from(items).map((item) => {
         return {
             elem: item,
             event: event,
             condition: (event) => event.key === required_key,
         };
     });
-    return race_events(events);
 }
 function capitalize_string(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
