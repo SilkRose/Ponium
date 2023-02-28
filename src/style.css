@@ -12,7 +12,6 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
 }
 
 main {
@@ -26,8 +25,6 @@ main {
 #game_content {
   max-width: 900px;
   width: 100%;
-  box-shadow: 0px 0px 10px #ccc;
-  background-color: #fff;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -65,8 +62,8 @@ main {
   flex-grow: 1;
   min-height: 2.25rem;
   outline: transparent;
-  background-color: #f2f2f2;
-  border: solid #a5a5a5 0.15rem;
+  border-style: solid;
+  border-width: 0.15rem;
   border-radius: 0;
   border-top: transparent;
   border-left: transparent;
@@ -88,54 +85,22 @@ main {
   margin-right: 0.5rem;
 }
 
-#input_radial input:focus,
-#input_field input:focus {
-  border-color: #eb458b;
-}
-
-#input_radial input[type="radio"]:active,
-#input_radial input[type="radio"]:checked,
-#input_radial input[type="radio"]:checked:focus {
-  accent-color: #eb458b;
-}
-
-#input_radial input[type="radio"]:hover {
-  accent-color: #a5a5a5;
-}
-
 #input_radial label:has(input[type="radio"]:hover),
 #input_radial label:has(input[type="radio"]:checked) {
-  border-color: #a5a5a5;
   text-decoration: underline;
-  text-decoration-color: #a5a5a5;
   text-decoration-thickness: 0.15rem;
   text-underline-offset: 0.25rem;
-}
-
-#input_radial label:has(input[type="radio"]:checked:focus) {
-  text-decoration-color: #eb458b;
 }
 
 #input_radial button,
 #input_field button {
   outline: transparent;
-  background-color: #e9e9ed;
-  border-color: #a5a5a5;
   border-style: solid;
   border-radius: 0;
   padding: 0.5rem;
 }
 
-#input_radial button:hover,
-#input_radial button:focus,
-#input_field button:hover,
-#input_field button:focus {
-  background-color: #d0d0d7;
-  border-color: #eb458b;
-}
-
 ::placeholder {
-  color: rgb(85, 85, 85);
   font-style: italic;
   /* Set opacity for Firefox. */
   opacity: 1;

@@ -1,0 +1,74 @@
+:root {
+  --text: #000;
+  --background: #f2f2f2;
+  --foreground: #fff;
+  --shadow: #ccc;
+  --border: #a5a5a5;
+  --placeholder: #555;
+  --input_background: #f2f2f2;
+  --button_background: #e9e9ed;
+  --button_hover_background: #d0d0d7;
+  --mane_accent_inactive: #a5a5a5;
+  --mane_accent_active: #eb458b;
+}
+
+* {
+  color: var(--text);
+}
+
+body {
+  background-color: var(--background);
+}
+
+#game_content {
+  box-shadow: 0px 0px 10px var(--shadow);
+  background-color: var(--foreground);
+}
+
+#input_field input {
+  background-color: var(--input_background);
+  border-color: var(--border);
+}
+
+#input_radial input:focus,
+#input_field input:focus {
+  border-color: var(--mane_accent_active);
+}
+
+#input_radial input[type="radio"]:active,
+#input_radial input[type="radio"]:checked,
+#input_radial input[type="radio"]:checked:focus {
+  accent-color: var(--mane_accent_active);
+}
+
+#input_radial label:has(input[type="radio"]:checked:focus) {
+  text-decoration-color: var(--mane_accent_active);
+}
+
+#input_radial button:hover,
+#input_radial button:focus,
+#input_field button:hover,
+#input_field button:focus {
+  background-color: var(--button_hover_background);
+  border-color: var(--mane_accent_active);
+}
+
+#input_radial input[type="radio"]:hover {
+  accent-color: var(--mane_accent_inactive);
+}
+
+#input_radial label:has(input[type="radio"]:hover),
+#input_radial label:has(input[type="radio"]:checked) {
+  border-color: var(--border);
+  text-decoration-color: var(--mane_accent_inactive);
+}
+
+#input_radial button,
+#input_field button {
+  background-color: var(--button_background);
+  border-color: var(--border);
+}
+
+::placeholder {
+  color: var(--placeholder);
+}
