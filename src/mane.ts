@@ -64,18 +64,17 @@ const root = document.documentElement;
 window.onload = mane;
 
 async function mane() {
-  await create_dual_timers(6000, "Baking pie: ", 10);
-  await create_skip_timer(3000);
-  await create_timer(2000);
+  await create_dual_timers(5000, "Baking pie: ", 4);
+  await create_skip_timer(2000);
   await create_timer(1000);
   const test_data = characters.pinkie_pie;
   append_element(JSON.stringify(test_data));
   let player = await create_character();
-  await create_skip_timer(5000);
+  await create_skip_timer(3000);
   append_element(player.name);
-  await create_dual_timers(8000, "Eating pie: ", 40);
+  await create_dual_timers(2500, "Eating pie: ", 4);
   append_element(player.age.toString());
-  await create_skip_timer(5000);
+  await create_skip_timer(3000);
   append_element(player.species.race.toString());
   if (player.species.race === "Pony") {
     append_element(player.species.sub_race.toString());
@@ -95,7 +94,6 @@ function append_element(element: string) {
 async function read_line_text(type: InputType): Promise<string> {
   const input_field = create_text_input_field(type, true);
   game_content.appendChild(input_field);
-  input_field.scrollIntoView();
   const input = document.getElementById("input") as HTMLInputElement;
   const button = document.getElementById("submit") as HTMLButtonElement;
   input.focus();
@@ -105,7 +103,7 @@ async function read_line_text(type: InputType): Promise<string> {
       elem: button,
       event: "click",
     },
-    get_promise_from_input_event(input, "keydown", "Enter"),
+    get_event_from_input_element(input, "keydown", "Enter"),
   ]);
   game_content.removeChild(game_content.lastChild!);
   return input.value.trim();
@@ -114,7 +112,6 @@ async function read_line_text(type: InputType): Promise<string> {
 async function read_line_radial<T>(options: readonly string[]): Promise<T> {
   const radio_element = create_radial_input_field(options);
   game_content.appendChild(radio_element);
-  radio_element.scrollIntoView();
   const input = document.getElementsByName(
     "radial"
   ) as NodeListOf<HTMLInputElement>;
@@ -126,7 +123,7 @@ async function read_line_radial<T>(options: readonly string[]): Promise<T> {
       elem: button,
       event: "click",
     },
-    ...get_promise_from_radial_event(input, "keydown", "Enter"),
+    ...get_event_from_radio_list(input, "keydown", "Enter"),
   ]);
   const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
   game_content.removeChild(game_content.lastChild!);
@@ -137,7 +134,7 @@ async function read_line_radial<T>(options: readonly string[]): Promise<T> {
   }
 }
 
-function get_promise_from_input_event(
+function get_event_from_input_element(
   item: HTMLInputElement,
   event: string,
   required_key: string
@@ -149,7 +146,7 @@ function get_promise_from_input_event(
   };
 }
 
-function get_promise_from_radial_event(
+function get_event_from_radio_list(
   items: NodeListOf<HTMLInputElement>,
   event: string,
   required_key: string
@@ -313,10 +310,10 @@ function on_paste_event_override(input: HTMLInputElement, answer: string) {
   });
 }
 
-function create_text_input_field(type: string, button: boolean) {
+function create_text_input_field(type: InputType, button: boolean) {
   const new_element = create_div_element(["content"], "input_field");
   new_element.appendChild(
-    create_text_input_element("input", InputType.text, "Enter response...")
+    create_text_input_element("input", type, "Enter response...")
   );
   if (button) {
     new_element.appendChild(create_button_element("submit", "Enter"));
@@ -440,7 +437,7 @@ async function create_skip_timer(time: number) {
     "./game_assets/images/skip_timer_filled.png"
   );
   const text = create_paragraph_element(
-    "Press any button, or click anywhere to continue.",
+    "Press any key, click or tap anywhere to continue.",
     ["content", "skip_timer_text"]
   );
   game_content.appendChild(text);
