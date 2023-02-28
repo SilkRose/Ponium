@@ -37,18 +37,17 @@ const root = document.documentElement;
 window.onload = mane;
 function mane() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield create_dual_timers(6000, "Baking pie: ", 10);
-        yield create_skip_timer(3000);
-        yield create_timer(2000);
+        yield create_dual_timers(5000, "Baking pie: ", 4);
+        yield create_skip_timer(2000);
         yield create_timer(1000);
         const test_data = characters.pinkie_pie;
         append_element(JSON.stringify(test_data));
         let player = yield create_character();
-        yield create_skip_timer(5000);
+        yield create_skip_timer(3000);
         append_element(player.name);
-        yield create_dual_timers(8000, "Eating pie: ", 40);
+        yield create_dual_timers(2500, "Eating pie: ", 4);
         append_element(player.age.toString());
-        yield create_skip_timer(5000);
+        yield create_skip_timer(3000);
         append_element(player.species.race.toString());
         if (player.species.race === "Pony") {
             append_element(player.species.sub_race.toString());
@@ -68,7 +67,6 @@ function read_line_text(type) {
     return __awaiter(this, void 0, void 0, function* () {
         const input_field = create_text_input_field(type, true);
         game_content.appendChild(input_field);
-        input_field.scrollIntoView();
         const input = document.getElementById("input");
         const button = document.getElementById("submit");
         input.focus();
@@ -78,7 +76,7 @@ function read_line_text(type) {
                 elem: button,
                 event: "click",
             },
-            get_promise_from_input_event(input, "keydown", "Enter"),
+            get_event_from_input_element(input, "keydown", "Enter"),
         ]);
         game_content.removeChild(game_content.lastChild);
         return input.value.trim();
@@ -88,7 +86,6 @@ function read_line_radial(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const radio_element = create_radial_input_field(options);
         game_content.appendChild(radio_element);
-        radio_element.scrollIntoView();
         const input = document.getElementsByName("radial");
         const button = document.getElementById("submit");
         input[0].focus();
@@ -98,7 +95,7 @@ function read_line_radial(options) {
                 elem: button,
                 event: "click",
             },
-            ...get_promise_from_radial_event(input, "keydown", "Enter"),
+            ...get_event_from_radio_list(input, "keydown", "Enter"),
         ]);
         const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
         game_content.removeChild(game_content.lastChild);
@@ -110,14 +107,14 @@ function read_line_radial(options) {
         }
     });
 }
-function get_promise_from_input_event(item, event, required_key) {
+function get_event_from_input_element(item, event, required_key) {
     return {
         elem: item,
         event: event,
         condition: (event) => event.key === required_key,
     };
 }
-function get_promise_from_radial_event(items, event, required_key) {
+function get_event_from_radio_list(items, event, required_key) {
     return Array.from(items).map((item) => {
         return {
             elem: item,
@@ -277,7 +274,7 @@ function on_paste_event_override(input, answer) {
 }
 function create_text_input_field(type, button) {
     const new_element = create_div_element(["content"], "input_field");
-    new_element.appendChild(create_text_input_element("input", InputType.text, "Enter response..."));
+    new_element.appendChild(create_text_input_element("input", type, "Enter response..."));
     if (button) {
         new_element.appendChild(create_button_element("submit", "Enter"));
     }
@@ -378,7 +375,7 @@ function create_skip_timer(time) {
         const timer = create_div_element(["timer"]);
         const timer_filled = create_image_element(["pixelated", "timer_background", "skip_timer"], "./game_assets/images/skip_timer_unfilled.png");
         const timer_unfilled = create_image_element(["pixelated", "timer_foreground", "timer_sides_to_center", "skip_timer"], "./game_assets/images/skip_timer_filled.png");
-        const text = create_paragraph_element("Press any button, or click anywhere to continue.", ["content", "skip_timer_text"]);
+        const text = create_paragraph_element("Press any key, click or tap anywhere to continue.", ["content", "skip_timer_text"]);
         game_content.appendChild(text);
         timer.appendChild(timer_filled);
         timer.appendChild(timer_unfilled);
