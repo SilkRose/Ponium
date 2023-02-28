@@ -18,6 +18,21 @@
 
 body {
   background-color: var(--background);
+  /*                                                         coat,     outline,    coat */
+  /* Sparkle */
+  background-image: conic-gradient(from 290deg at 50% 150%, #CC9CDF, #A46BBD, #CC9CDF);
+  /* Balloon */
+  background-image: conic-gradient(from 290deg at 50% 150%, #f5b8d0, #e882b2, #f5b7d0);
+  /* Gem */
+  background-image: conic-gradient(from 290deg at 50% 150%, #EAEEF0, #BDC1C2, #EAEEF0);
+  /* Apple */
+  background-image: conic-gradient(from 290deg at 50% 150%, #FABA62, #EF6F2F, #FABA62);
+  /* Lightning */
+  background-image: conic-gradient(from 290deg at 50% 150%, #9BDBF5, #6BABDA, #9BDBF5);
+  /* Butterfly */
+  background-image: conic-gradient(from 290deg at 50% 150%, #FAF5AB, #E9D461, #FAF5AB);
+
+  background-image: none;
 }
 
 #game_content {
