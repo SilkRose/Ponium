@@ -1,17 +1,3 @@
-:root {
-  --text: #000;
-  --background: #f2f2f2;
-  --foreground: #fff;
-  --shadow: #ccc;
-  --border: #a5a5a5;
-  --placeholder: #555;
-  --input_background: #f2f2f2;
-  --button_background: #e9e9ed;
-  --button_hover_background: #d0d0d7;
-  --mane_accent_inactive: #a5a5a5;
-  --mane_accent_active: #eb458b;
-}
-
 * {
   color: var(--text);
 }
@@ -86,4 +72,50 @@ body {
 
 ::placeholder {
   color: var(--placeholder);
+}
+
+@mixin theme-light {
+  --text: #000;
+  --background: #f2f2f2;
+  --foreground: #fff;
+  --shadow: #ccc;
+  --border: #a5a5a5;
+  --placeholder: #555;
+  --input_background: #f2f2f2;
+  --button_background: #e9e9ed;
+  --button_hover_background: #d0d0d7;
+  --mane_accent_inactive: #a5a5a5;
+  --mane_accent_active: #eb458b;
+}
+
+@mixin theme-dark {
+  --text: #fff;
+  --background: #000;
+  --foreground: #0d0d0d;
+  --shadow: #444;
+  --border: #5a5a5a;
+  --placeholder: #aaaaaa;
+  --input_background: #0d0d0d;
+  --button_background: #161612;
+  --button_hover_background: #2f2f28;
+  --mane_accent_inactive: #5a5a5a;
+  --mane_accent_active: #14ba74;
+}
+
+:root {
+  @include theme-light();
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include theme-dark();
+  }
+}
+
+.theme-light {
+  @include theme-light();
+}
+
+.theme-dark {
+  @include theme-dark();
 }
