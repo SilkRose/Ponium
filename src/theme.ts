@@ -98,3 +98,5 @@ function set_current_theme(theme: ThemeSet) {
   root.style.setProperty("--mane_accent_inactive", theme.mane_accent_inactive);
   root.style.setProperty("--mane_accent_active", theme.mane_accent_active);
 }
+
+export {};
