@@ -45,11 +45,17 @@ type Character = {
   inventory: "";
 };
 
+type Event = HTMLElementEventMap[keyof HTMLElementEventMap];
+
+type KeyEvent = {
+  key: string,
+}
+
 type RaceEvent = {
   elem: HTMLElement;
   event: keyof HTMLElementEventMap;
   prevent_default?: boolean;
-  condition?: (event: any) => boolean;
+  condition?: (event: KeyEvent) => boolean;
 };
 
 enum InputType {
@@ -103,7 +109,7 @@ async function read_line_text(type: InputType): Promise<string> {
       elem: button,
       event: "click",
     },
-    get_event_from_input_element(input, "keydown", "Enter"),
+    ...get_event_from_input_elements([input], "keydown", "Enter"),
   ]);
   game_content.removeChild(game_content.lastChild!);
   return input.value.trim();
@@ -123,7 +129,7 @@ async function read_line_radial<T>(options: readonly string[]): Promise<T> {
       elem: button,
       event: "click",
     },
-    ...get_event_from_radio_list(input, "keydown", "Enter"),
+    ...get_event_from_input_elements(Array.from(input), "keydown", "Enter"),
   ]);
   const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
   game_content.removeChild(game_content.lastChild!);
@@ -134,28 +140,16 @@ async function read_line_radial<T>(options: readonly string[]): Promise<T> {
   }
 }
 
-function get_event_from_input_element(
-  item: HTMLInputElement,
-  event: string,
+function get_event_from_input_elements(
+  items: HTMLInputElement[],
+  event: keyof HTMLElementEventMap,
   required_key: string
 ) {
-  return {
-    elem: item,
-    event: event as any,
-    condition: (event: { key: string }) => event.key === required_key,
-  };
-}
-
-function get_event_from_radio_list(
-  items: NodeListOf<HTMLInputElement>,
-  event: string,
-  required_key: string
-) {
-  return Array.from(items).map((item) => {
+  return items.map((item) => {
     return {
       elem: item,
-      event: event as any,
-      condition: (event: { key: string }) => event.key === required_key,
+      event: event,
+      condition: (event: KeyEvent) => event.key === required_key,
     };
   });
 }
@@ -556,14 +550,14 @@ function race_events(events: Array<RaceEvent>) {
     let done = false;
 
     let events_and_listeners = events.map((e) => {
-      let listener = (event: any) => global_listener(e, event);
+      let listener = (event: Event) => global_listener(e, event);
       e.elem.addEventListener(e.event, listener);
       return [e, listener] as const;
     });
 
-    function global_listener(race_event: RaceEvent, event: any) {
+    function global_listener(race_event: RaceEvent, event: Event) {
       if (done) return;
-      if (race_event.condition && !race_event.condition(event)) return;
+      if (race_event.condition && !race_event.condition(event as KeyEvent)) return;
 
       done = true;
       events_and_listeners.forEach(([e, listener]) =>
