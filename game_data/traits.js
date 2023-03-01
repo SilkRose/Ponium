@@ -6,3 +6,4 @@ export let traits = [
     "Farmer",
     "Cool",
 ];
+//# sourceMappingURL=traits.js.map

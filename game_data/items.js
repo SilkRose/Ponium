@@ -12,3 +12,4 @@ export const items = [
         value: 1,
     },
 ];
+//# sourceMappingURL=items.js.map
