@@ -76,7 +76,7 @@ function read_line_text(type) {
                 elem: button,
                 event: "click",
             },
-            get_event_from_input_element(input, "keydown", "Enter"),
+            ...get_event_from_input_elements([input], "keydown", "Enter"),
         ]);
         game_content.removeChild(game_content.lastChild);
         return input.value.trim();
@@ -95,7 +95,7 @@ function read_line_radial(options) {
                 elem: button,
                 event: "click",
             },
-            ...get_event_from_radio_list(input, "keydown", "Enter"),
+            ...get_event_from_input_elements(Array.from(input), "keydown", "Enter"),
         ]);
         const checked = Array.from(input).filter((radial) => radial.checked)[0].value;
         game_content.removeChild(game_content.lastChild);
@@ -107,15 +107,8 @@ function read_line_radial(options) {
         }
     });
 }
-function get_event_from_input_element(item, event, required_key) {
-    return {
-        elem: item,
-        event: event,
-        condition: (event) => event.key === required_key,
-    };
-}
-function get_event_from_radio_list(items, event, required_key) {
-    return Array.from(items).map((item) => {
+function get_event_from_input_elements(items, event, required_key) {
+    return items.map((item) => {
         return {
             elem: item,
             event: event,
