@@ -1,8 +1,8 @@
 {
-  "name": "librepony",
-  "version": "1.0.0",
+  "name": "libre-pony",
+  "version": "0.0.1",
   "description": "Get your free pony today!",
-  "main": "mane.js",
+  "private": true,
   "scripts": {
     "build": "./build.sh"
   },

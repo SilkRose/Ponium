@@ -266,15 +266,18 @@ function get_promise_from_input_event_override(
               } else {
                 item.value = answer.slice(0, item.value.length + 1);
               }
+              break;
             case "Delete":
               if (item.value === answer) {
                 button.remove();
               }
               item.value = answer.slice(0, item.value.length - 1);
+              break;
             case "Backspace":
               if (document.contains(button)) {
                 button.remove();
               }
+              break;
             default:
               item.value = answer.slice(0, item.value.length);
               if (item.value === answer) {
