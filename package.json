@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Get your free pony today!",
   "private": true,
+  "packageManager": "pnpm@7.28.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

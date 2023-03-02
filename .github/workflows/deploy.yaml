@@ -19,11 +19,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - run: npm ci
+          node-version: 19.3.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
 
       - name: Build
-        run: ./build.sh
+        run: ./build.sh gh-pages
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
