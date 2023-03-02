@@ -1,6 +1,6 @@
-import * as characters from "./game_data/character/characters.js";
-import { traits } from "./game_data/traits.js";
-import { items } from "./game_data/items.js";
+import * as characters from "./data/character/characters.js";
+import { traits } from "./data/traits.js";
+import { items } from "./data/items.js";
 import * as image from "./assets.js";
 
 const pony = "Pony" as const;
