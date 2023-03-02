@@ -29,7 +29,6 @@ export function load_theme() {
 }
 
 export function set_current_theme(theme?: Theme) {
-  root.classList.remove(current_theme);
-  if (theme) root.classList.add(theme);
+  root.classList.replace(current_theme, theme ?? Theme.None);
   current_theme = theme ?? Theme.None;
 }

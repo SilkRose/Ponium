@@ -1,8 +1,8 @@
-import * as characters from "./data/character/characters.js";
-import { traits } from "./data/traits.js";
-import { items } from "./data/items.js";
-import * as image from "./assets.js";
-import { set_theme } from "./theme";
+import * as characters from "./data/character/characters";
+import { traits } from "./data/traits";
+import { items } from "./data/items";
+import * as image from "./assets";
+import { Theme, set_current_theme, set_theme } from "./theme";
 
 const pony = "Pony" as const;
 
@@ -73,6 +73,8 @@ window.onload = mane;
 
 async function mane() {
   set_theme();
+  const cmd = await read_line_text(InputType.text);
+  await command_parser(cmd);
   await create_dual_timers(5000, "Baking pie: ", 4);
   await create_skip_timer(2000);
   await create_timer(1000);
@@ -569,4 +571,39 @@ function race_events(events: Array<RaceEvent>) {
       res();
     }
   });
+}
+
+const commands = ["set", "unset"];
+const set_commands = ["theme"];
+
+
+async function command_parser(command: string) {
+  if (command.startsWith("/")) {
+    append_element(command);
+    const cmd = command.split(" ")[0].slice(1);
+    const object = command.split(" ")[1];
+    const value = command.split(" ")[2];
+    if (commands.includes(cmd)) {
+      if (cmd === "set") {
+        set_cmd(object, value)
+      }
+    }
+  } else {
+    append_element("To enter a command, start with / before the command.");
+  }
+}
+
+function set_cmd(thing: string, value: string) {
+  if (set_commands.includes(thing)) {
+    if (thing === "theme") {
+      switch (value) {
+        case "light":
+          set_current_theme(Theme.Light);
+        case "dark":
+          set_current_theme(Theme.Dark);
+        case "none":
+          set_current_theme();
+      }
+    }
+  }
 }
