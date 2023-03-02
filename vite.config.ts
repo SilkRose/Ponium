@@ -1,6 +1,7 @@
 import path from "path";
 import { defineConfig } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
   clearScreen: false,
@@ -23,6 +24,11 @@ export default defineConfig({
     createHtmlPlugin({
       minify: true,
       template: "index.html",
+    }),
+    ViteImageOptimizer({
+      png: {
+        quality: 100,
+      },
     }),
   ],
 });
