@@ -35,5 +35,3 @@ function set_current_theme(theme?: Theme) {
   if (theme) root.classList.add(theme);
   current = theme ?? Theme.None;
 }
-
-export {};
