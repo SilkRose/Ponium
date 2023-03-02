@@ -1,5 +1,6 @@
 import path from "path";
 import { defineConfig } from "vite";
+import { createHtmlPlugin } from "vite-plugin-html";
 
 export default defineConfig({
   clearScreen: false,
@@ -11,11 +12,17 @@ export default defineConfig({
     minify: "terser",
     terserOptions: {
       compress: {
-        passes: 3
-      }
-    }
+        passes: 3,
+      },
+    },
   },
   server: {
-    open: false
-  }
+    open: false,
+  },
+  plugins: [
+    createHtmlPlugin({
+      minify: true,
+      template: "index.html",
+    }),
+  ],
 });
