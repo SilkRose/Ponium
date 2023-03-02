@@ -1,3 +1,5 @@
+@use "./theme.scss";
+
 :root {
   --timer_duration: 0ms;
   --sub_timer_duration: 0ms;
@@ -211,11 +213,11 @@ main {
   }
 
   .timer_background:not(.sub_timer, .skip_timer) {
-    content: url("./game_assets/images/small_timer_filled.png");
+    content: url("./assets/images/small-timer-filled.png");
   }
 
   .timer_foreground:not(.sub_timer, .skip_timer) {
-    content: url("./game_assets/images/small_timer_unfilled.png");
+    content: url("./assets/images/small-timer-unfilled.png");
   }
 
   .timer_sides_to_center {
@@ -223,10 +225,10 @@ main {
   }
 
   .skip_timer.timer_background {
-    content: url("./game_assets/images/small_skip_timer_unfilled.png");
+    content: url("./assets/images/small-skip-timer-unfilled.png");
   }
 
   .skip_timer.timer_foreground {
-    content: url("./game_assets/images/small_skip_timer_filled.png");
+    content: url("./assets/images/small-skip-timer-filled.png");
   }
 }

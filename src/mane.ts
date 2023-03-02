@@ -2,6 +2,7 @@ import * as characters from "./data/character/characters.js";
 import { traits } from "./data/traits.js";
 import { items } from "./data/items.js";
 import * as image from "./assets.js";
+import { set_theme } from "./theme";
 
 const pony = "Pony" as const;
 
@@ -71,6 +72,7 @@ const root = document.documentElement;
 window.onload = mane;
 
 async function mane() {
+  set_theme();
   await create_dual_timers(5000, "Baking pie: ", 4);
   await create_skip_timer(2000);
   await create_timer(1000);
