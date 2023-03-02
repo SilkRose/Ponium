@@ -1,7 +1,7 @@
 import * as characters from "./game_data/character/characters.js";
 import { traits } from "./game_data/traits.js";
 import { items } from "./game_data/items.js";
-import * as images from "./assets.js";
+import * as image from "./assets.js";
 
 const pony = "Pony" as const;
 
@@ -373,11 +373,11 @@ async function create_timer(time: number) {
   const timer = create_div_element(["timer"]);
   const timer_filled = create_image_element(
     ["pixelated", "timer_background"],
-    images.timer_filled_img.default
+    image.timer_filled
   );
   const timer_unfilled = create_image_element(
     ["pixelated", "timer_foreground", "timer_left_to_right"],
-    images.timer_unfilled_img.default
+    image.timer_unfilled
   );
   timer.appendChild(timer_filled);
   timer.appendChild(timer_unfilled);
@@ -425,11 +425,11 @@ async function create_skip_timer(time: number) {
   const timer = create_div_element(["timer"]);
   const timer_filled = create_image_element(
     ["pixelated", "timer_background", "skip_timer"],
-    images.skip_timer_unfilled_img.default
+    image.skip_timer_unfilled
   );
   const timer_unfilled = create_image_element(
     ["pixelated", "timer_foreground", "timer_sides_to_center", "skip_timer"],
-    images.skip_timer_filled_img.default
+    image.skip_timer_filled
   );
   const text = create_paragraph_element(
     "Press any key, click or tap anywhere to continue.",
@@ -482,11 +482,11 @@ async function create_dual_timers(time: number, text: string, amount: number) {
   const small_timer_text = create_paragraph_element(text + "1/" + amount);
   const sub_timer_filled = create_image_element(
     ["pixelated", "timer_background", "sub_timer"],
-    images.small_timer_filled_img.default
+    image.small_timer_filled
   );
   const sub_timer_unfilled = create_image_element(
     ["pixelated", "timer_foreground", "sub_timer", "sub_timer_left_to_right"],
-    images.small_timer_unfilled_img.default
+    image.small_timer_unfilled
   );
   small_timer.appendChild(sub_timer_filled);
   small_timer.appendChild(sub_timer_unfilled);
@@ -496,11 +496,11 @@ async function create_dual_timers(time: number, text: string, amount: number) {
   const timer = create_div_element(["timer"]);
   const timer_filled = create_image_element(
     ["pixelated", "timer_background"],
-    images.timer_filled_img.default
+    image.timer_filled
   );
   const timer_unfilled = create_image_element(
     ["pixelated", "timer_foreground", "timer_left_to_right"],
-    images.timer_unfilled_img.default
+    image.timer_unfilled
   );
   timer.appendChild(timer_filled);
   timer.appendChild(timer_unfilled);
