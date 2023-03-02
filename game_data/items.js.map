@@ -1,1 +1,0 @@
-{"version":3,"file":"items.js","sourceRoot":"","sources":["../../src/game_data/items.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,KAAK,GAAG;IACnB;QACE,IAAI,EAAE,KAAK;QACX,KAAK,EAAE,EAAE;KACV;IACD;QACE,IAAI,EAAE,MAAM;QACZ,KAAK,EAAE,GAAG;KACX;IACD;QACE,IAAI,EAAE,KAAK;QACX,KAAK,EAAE,CAAC;KACT;CACF,CAAC"}
