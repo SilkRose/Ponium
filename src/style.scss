@@ -37,11 +37,17 @@ main {
   > :last-child {
     padding-bottom: 0;
   }
+  @media (max-width: 450px) {
+    padding: 1rem;
+  }
 }
 
 .content {
   padding: 0.5rem 0rem;
   animation: fade 250ms ease-in;
+  @media (max-width: 450px) {
+    padding: 0.25rem 0;
+  }
 }
 
 @keyframes fade {
@@ -154,34 +160,7 @@ main {
     animation-iteration-count: var(--sub_timer_count);
     animation-duration: var(--sub_timer_duration);
   }
-}
-
-@keyframes left-to-right-progress-bar {
-  from {
-    clip-path: inset(0 0 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 100%);
-  }
-}
-
-@keyframes sides-to-center-progress-bar {
-  from {
-    clip-path: inset(0 0 0 0);
-  }
-  to {
-    clip-path: inset(0 50% 0 50%);
-  }
-}
-
-@media (max-width: 450px) {
-  #game-content {
-    padding: 1rem;
-  }
-  .content {
-    padding: 0.25rem 0;
-  }
-  .timer {
+  @media (max-width: 450px) {
     &-dual-spacing {
       height: 0.75rem;
     }
@@ -209,5 +188,23 @@ main {
     &-skip.timer-foreground {
       content: url("./assets/images/small-skip-timer-filled.png");
     }
+  }
+}
+
+@keyframes left-to-right-progress-bar {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+@keyframes sides-to-center-progress-bar {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 50% 0 50%);
   }
 }
