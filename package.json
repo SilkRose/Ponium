@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/SilkRose/LibrePony#readme",
   "devDependencies": {
+    "@total-typescript/ts-reset": "^0.3.7",
     "@types/node": "^18.14.4",
     "sass": "^1.58.3",
     "sharp": "^0.31.3",

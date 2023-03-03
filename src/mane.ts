@@ -3,6 +3,7 @@ import { traits } from "./data/traits";
 import { items } from "./data/items";
 import * as image from "./assets";
 import { Theme, set_current_theme, set_theme } from "./theme";
+import "@total-typescript/ts-reset";
 
 const pony = "Pony" as const;
 
