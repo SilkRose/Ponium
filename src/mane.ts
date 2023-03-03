@@ -51,8 +51,8 @@ type Character = {
 type Event = HTMLElementEventMap[keyof HTMLElementEventMap];
 
 type KeyEvent = {
-  key: string,
-}
+  key: string;
+};
 
 type RaceEvent = {
   elem: HTMLElement;
@@ -67,7 +67,21 @@ enum InputType {
   radio = "radio",
 }
 
-const game_content = document.getElementById("game_content")!;
+const timer_classes = {
+  timer: "timer",
+  background: "timer-background",
+  foreground: "timer-foreground",
+  skip: "timer-skip",
+  skip_text: "timer-skip-text",
+  left_to_right: "timer-left-to-right",
+  sides_to_center: "timer-sides-to-center",
+  dual_spacing: "timer-dual-spacing",
+  sub: "timer-sub",
+  sub_div: "timer-sub-div",
+  sub_left_to_right: "timer-sub-left-to-right",
+};
+
+const game_content = document.getElementById("game-content")!;
 const root = document.documentElement;
 
 window.onload = mane;
@@ -375,13 +389,13 @@ function create_radio_element(value: string, checked?: boolean) {
 
 async function create_timer(time: number) {
   root.style.setProperty("--timer_delay", time + "ms");
-  const timer = create_div_element(["timer"]);
+  const timer = create_div_element([timer_classes.timer]);
   const timer_filled = create_image_element(
-    ["pixelated", "timer_background"],
+    ["pixelated", timer_classes.background],
     image.timer_filled
   );
   const timer_unfilled = create_image_element(
-    ["pixelated", "timer_foreground", "timer_left_to_right"],
+    ["pixelated", timer_classes.foreground, timer_classes.left_to_right],
     image.timer_unfilled
   );
   timer.appendChild(timer_filled);
@@ -427,18 +441,23 @@ function create_image_element(classes: string[], src: string, id?: string) {
 
 async function create_skip_timer(time: number) {
   root.style.setProperty("--timer_delay", time + "ms");
-  const timer = create_div_element(["timer"]);
+  const timer = create_div_element([timer_classes.timer]);
   const timer_filled = create_image_element(
-    ["pixelated", "timer_background", "skip_timer"],
+    ["pixelated", timer_classes.background, timer_classes.skip],
     image.skip_timer_unfilled
   );
   const timer_unfilled = create_image_element(
-    ["pixelated", "timer_foreground", "timer_sides_to_center", "skip_timer"],
+    [
+      "pixelated",
+      timer_classes.foreground,
+      timer_classes.sides_to_center,
+      timer_classes.skip,
+    ],
     image.skip_timer_filled
   );
   const text = create_paragraph_element(
     "Press any key, click or tap anywhere to continue.",
-    ["content", "skip_timer_text"]
+    ["content", timer_classes.skip_text]
   );
   game_content.appendChild(text);
   timer.appendChild(timer_filled);
@@ -483,34 +502,39 @@ async function create_dual_timers(time: number, text: string, amount: number) {
   root.style.setProperty("--sub_timer_duration", time / amount + "ms");
   root.style.setProperty("--sub_timer_count", amount.toString());
   const timers = create_div_element(["content"]);
-  const small_timer = create_div_element(["timer"]);
+  const small_timer = create_div_element([timer_classes.timer]);
   const small_timer_text = create_paragraph_element(text + "1/" + amount);
   const sub_timer_filled = create_image_element(
-    ["pixelated", "timer_background", "sub_timer"],
+    ["pixelated", timer_classes.background, timer_classes.sub],
     image.small_timer_filled
   );
   const sub_timer_unfilled = create_image_element(
-    ["pixelated", "timer_foreground", "sub_timer", "sub_timer_left_to_right"],
+    [
+      "pixelated",
+      timer_classes.foreground,
+      timer_classes.sub,
+      timer_classes.sub_left_to_right,
+    ],
     image.small_timer_unfilled
   );
   small_timer.appendChild(sub_timer_filled);
   small_timer.appendChild(sub_timer_unfilled);
-  const sub_timer = create_div_element(["sub_timer_div"]);
+  const sub_timer = create_div_element([timer_classes.sub_div]);
   sub_timer.appendChild(small_timer_text);
   sub_timer.appendChild(small_timer);
-  const timer = create_div_element(["timer"]);
+  const timer = create_div_element([timer_classes.timer]);
   const timer_filled = create_image_element(
-    ["pixelated", "timer_background"],
+    ["pixelated", timer_classes.background],
     image.timer_filled
   );
   const timer_unfilled = create_image_element(
-    ["pixelated", "timer_foreground", "timer_left_to_right"],
+    ["pixelated", timer_classes.foreground, timer_classes.left_to_right],
     image.timer_unfilled
   );
   timer.appendChild(timer_filled);
   timer.appendChild(timer_unfilled);
   timers.appendChild(sub_timer);
-  const spacer = create_div_element(["dual_timer_spacing"]);
+  const spacer = create_div_element([timer_classes.dual_spacing]);
   timers.appendChild(spacer);
   timers.appendChild(timer);
   game_content.appendChild(timers);
@@ -563,7 +587,8 @@ function race_events(events: Array<RaceEvent>) {
 
     function global_listener(race_event: RaceEvent, event: Event) {
       if (done) return;
-      if (race_event.condition && !race_event.condition(event as KeyEvent)) return;
+      if (race_event.condition && !race_event.condition(event as KeyEvent))
+        return;
 
       done = true;
       events_and_listeners.forEach(([e, listener]) =>
@@ -577,7 +602,6 @@ function race_events(events: Array<RaceEvent>) {
 const commands = ["set", "unset"];
 const set_commands = ["theme"];
 
-
 async function command_parser(command: string) {
   if (command.startsWith("/")) {
     append_element(command);
@@ -586,7 +610,7 @@ async function command_parser(command: string) {
     const value = command.split(" ")[2];
     if (commands.includes(cmd)) {
       if (cmd === "set") {
-        set_cmd(object, value)
+        set_cmd(object, value);
       }
     }
   } else {
