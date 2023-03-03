@@ -191,20 +191,18 @@ main {
   }
 }
 
-@keyframes left-to-right-progress-bar {
-  from {
-    clip-path: inset(0 0 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 100%);
-  }
-}
+$timer-animations: (
+  left-to-right-progress-bar: 0 0 0 100%,
+  sides-to-center-progress-bar: 0 50% 0 50%,
+);
 
-@keyframes sides-to-center-progress-bar {
-  from {
-    clip-path: inset(0 0 0 0);
-  }
-  to {
-    clip-path: inset(0 50% 0 50%);
+@each $name, $inset in $timer-animations {
+  @keyframes #{$name} {
+    from {
+      clip-path: inset(0 0 0 0);
+    }
+    to {
+      clip-path: inset($inset);
+    }
   }
 }
