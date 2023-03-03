@@ -626,8 +626,6 @@ function set_cmd(thing: string, value: string) {
           set_current_theme(Theme.Light);
         case "dark":
           set_current_theme(Theme.Dark);
-        case "none":
-          set_current_theme();
       }
     }
   }
