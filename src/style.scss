@@ -209,3 +209,24 @@ $timer-animations: (
     }
   }
 }
+
+.logo {
+  font-family: "Randy-GG-Bold";
+  font-size: 4em;
+}
+
+.splash {
+  font-family: "Randy-GG-Regular";
+  font-style: italic;
+  font-size: 2em;
+}
+
+@font-face {
+  font-family: "Randy-GG-Bold";
+  src: url("./assets/fonts/RandyGG_Font/RandyGGBold.ttf");
+}
+
+@font-face {
+  font-family: "Randy-GG-Regular";
+  src: url("./assets/fonts/RandyGG_Font/RandyGGRegular.ttf");
+}

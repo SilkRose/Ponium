@@ -32,6 +32,8 @@ Libre-Pony is licensed under The MIT License ([MIT]).
 
 My Little Pony: Friendship is Magic © Hasbro, Inc.
 
+RandyGG Font © Thomas Randall
+
 ## Credits
 - **[Silk Rose]** - Primary developer
 - **[Meadowsys]** - Secondary developer

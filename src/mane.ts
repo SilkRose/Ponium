@@ -5,6 +5,8 @@ import * as image from "./assets";
 import { Theme, save_theme, set_theme, set_theme_onload } from "./theme";
 import "@total-typescript/ts-reset";
 
+const name = "Libre Pony" as const;
+
 const pony = "Pony" as const;
 
 const best_pony = "Pinkie Pie" as const;
@@ -88,6 +90,7 @@ window.onload = mane;
 
 async function mane() {
   set_theme_onload();
+  await mane_menu();
   let new_theme = await read_line_text(InputType.text);
   switch (new_theme) {
     case "light":
@@ -616,5 +619,43 @@ function set_cmd(thing: string, value: string) {
           break;
       }
     }
+  }
+}
+
+async function mane_menu() {
+  const menu = create_div_element(["mane-menu", "content"]);
+  const logo = create_heading_element(name, 1, ["logo"])
+  const splash = await get_splash();
+  menu.appendChild(logo);
+  menu.appendChild(create_paragraph_element(splash, ["splash"]));
+  game_content.appendChild(menu);
+}
+
+function create_heading_element(
+  text: string,
+  size: number,
+  classes?: string[],
+  id?: string
+) {
+  if (size > 6 || size < 1) size = 2;
+  const h = document.createElement(`h${size}`);
+  h.innerText = text;
+  if (classes) h.className = classes.join(" ");
+  if (id) h.id = id;
+  return h;
+}
+async function get_splash() {
+  let splashes;
+  const gh = "https://raw.githubusercontent.com";
+  const org = "Love-and-Tolerance";
+  const repo = "Love-and-Tolerance";
+  const location = "mane/assets/minecraft/texts/splashes.txt";
+  const splash_url = `${gh}/${org}/${repo}/${location}`;
+  try {
+      splashes = await fetch(splash_url);
+      splashes = (await splashes.text()).valueOf().split("\n");
+      return splashes[Math.floor(Math.random()*splashes.length)];
+  } catch (_) {
+    return "Get your free pony today!";
   }
 }
