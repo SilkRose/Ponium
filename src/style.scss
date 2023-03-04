@@ -110,7 +110,7 @@ main {
 
 ::placeholder {
   font-style: italic;
-  opacity: 1;  // Set opacity for Firefox.
+  opacity: 1; // Set opacity for Firefox.
 }
 
 .pixelated {
@@ -219,6 +219,10 @@ $timer-animations: (
   font-family: "Randy-GG-Regular";
   font-style: italic;
   font-size: 2em;
+  color: #ffff55;
+  background-color: black;
+  border-radius: 100vmax;
+  border: 2px solid hsl(0, 0%, 50%);
 }
 
 @font-face {
