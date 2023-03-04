@@ -4,15 +4,13 @@ export enum Theme {
 }
 
 const root = document.body;
-export let current_theme: Theme;
+export const themes = Object.values(Theme);
 
-export const themes = ["theme-light", "theme-dark"];
-
-export function set_theme() {
-  current_theme = load_theme() ?? Theme.Light;
+export function set_theme_onload() {
   const dark_mode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  if (dark_mode) current_theme = Theme.Dark;
-  set_current_theme(current_theme);
+  let theme = dark_mode ? Theme.Dark : Theme.Light;
+  theme = load_theme() ?? theme;
+  set_theme(theme);
 }
 
 export function save_theme(theme: Theme) {
@@ -21,18 +19,11 @@ export function save_theme(theme: Theme) {
 
 export function load_theme() {
   const theme = localStorage.getItem("theme");
-  switch (theme) {
-    case Theme.Light:
-      return Theme.Light;
-    case Theme.Dark:
-      return Theme.Dark;
-    default:
-      return null;
-  }
+  if (theme && themes.includes(theme)) return theme as Theme;
+  return null;
 }
 
-export function set_current_theme(theme: Theme) {
-  themes.forEach((theme_index) => root.classList.remove(theme_index));
+export function set_theme(theme: Theme) {
+  root.classList.remove(...themes);
   root.classList.add(theme);
-  current_theme = theme;
 }

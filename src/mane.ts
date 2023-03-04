@@ -2,7 +2,7 @@ import * as characters from "./data/character/characters";
 import { traits } from "./data/traits";
 import { items } from "./data/items";
 import * as image from "./assets";
-import { Theme, set_current_theme, set_theme } from "./theme";
+import { Theme, save_theme, set_theme, set_theme_onload } from "./theme";
 import "@total-typescript/ts-reset";
 
 const pony = "Pony" as const;
@@ -87,8 +87,21 @@ const root = document.documentElement;
 window.onload = mane;
 
 async function mane() {
-  set_theme();
-  await get_best_pony();
+  set_theme_onload();
+  let new_theme = await read_line_text(InputType.text);
+  switch (new_theme) {
+    case "light":
+      new_theme = Theme.Light;
+      break;
+    case "dark":
+      new_theme = Theme.Dark;
+      break;
+    default:
+      new_theme = Theme.Light;
+  }
+  append_element(new_theme);
+  set_theme(new_theme as Theme);
+  save_theme(new_theme as Theme);
 }
 
 function append_element(element: string) {
@@ -596,10 +609,10 @@ function set_cmd(thing: string, value: string) {
     if (thing === "theme") {
       switch (value) {
         case "light":
-          set_current_theme(Theme.Light);
+          set_theme(Theme.Light);
           break;
         case "dark":
-          set_current_theme(Theme.Dark);
+          set_theme(Theme.Dark);
           break;
       }
     }
