@@ -260,23 +260,24 @@ function get_promise_from_input_event_override(
     const listener = () => {
       item.onkeyup = function (key) {
         const cursor_position = item.selectionStart;
-        if (item.value.length !== 0) {
-          if (item.value === answer) {
-            if (key.key === "Enter") {
-              item.removeEventListener(event, listener);
-              resolve();
-            }
-            item.parentElement!.appendChild(button);
-            button.onclick = function () {
-              item.removeEventListener(event, listener);
-              resolve();
-            };
-          }
-        }
         item.value = answer.slice(0, item.value.length);
         item.setSelectionRange(cursor_position, cursor_position);
         if (item.value !== answer && document.contains(button)) {
           button.remove();
+        }
+        if (item.value.length > 0) {
+          if (item.value === answer) {
+            if (key.key === "Enter") {
+              item.removeEventListener(event, listener);
+              resolve();
+            } else {
+              item.parentElement!.appendChild(button);
+              button.onclick = function () {
+                item.removeEventListener(event, listener);
+                resolve();
+              };
+            }
+          }
         }
       };
     };
