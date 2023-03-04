@@ -88,24 +88,6 @@ window.onload = mane;
 
 async function mane() {
   set_theme();
-  const cmd = await read_line_text(InputType.text);
-  await command_parser(cmd);
-  await create_dual_timers(5000, "Baking pie: ", 4);
-  await create_skip_timer(2000);
-  await create_timer(1000);
-  const test_data = characters.pinkie_pie;
-  append_element(JSON.stringify(test_data));
-  let player = await create_character();
-  await create_skip_timer(3000);
-  append_element(player.name);
-  await create_dual_timers(2500, "Eating pie: ", 4);
-  append_element(player.age.toString());
-  await create_skip_timer(3000);
-  append_element(player.species.race.toString());
-  if (player.species.race === "Pony") {
-    append_element(player.species.sub_race.toString());
-  }
-  append_element(player.gender);
   await get_best_pony();
 }
 
@@ -277,34 +259,24 @@ function get_promise_from_input_event_override(
   return new Promise<void>((resolve) => {
     const listener = () => {
       item.onkeyup = function (key) {
+        const cursor_position = item.selectionStart;
         if (item.value.length !== 0) {
-          switch (key.key) {
-            case "Enter":
-              if (item.value === answer) {
-                item.removeEventListener(event, listener);
-                resolve();
-              } else {
-                item.value = answer.slice(0, item.value.length + 1);
-              }
-            case "Delete":
-              if (item.value === answer) {
-                button.remove();
-              }
-              item.value = answer.slice(0, item.value.length - 1);
-            case "Backspace":
-              if (document.contains(button)) {
-                button.remove();
-              }
-            default:
-              item.value = answer.slice(0, item.value.length);
-              if (item.value === answer) {
-                item.parentElement!.appendChild(button);
-                button.onclick = function () {
-                  item.removeEventListener(event, listener);
-                  resolve();
-                };
-              }
+          if (item.value === answer) {
+            if (key.key === "Enter") {
+              item.removeEventListener(event, listener);
+              resolve();
+            }
+            item.parentElement!.appendChild(button);
+            button.onclick = function () {
+              item.removeEventListener(event, listener);
+              resolve();
+            };
           }
+        }
+        item.value = answer.slice(0, item.value.length);
+        item.setSelectionRange(cursor_position, cursor_position);
+        if (item.value !== answer && document.contains(button)) {
+          button.remove();
         }
       };
     };
@@ -624,8 +596,10 @@ function set_cmd(thing: string, value: string) {
       switch (value) {
         case "light":
           set_current_theme(Theme.Light);
+          break;
         case "dark":
           set_current_theme(Theme.Dark);
+          break;
       }
     }
   }
