@@ -652,8 +652,10 @@ function create_heading_element(
   if (id) h.id = id;
   return h;
 }
+
 async function get_splash() {
   let splashes;
+  const default_splash = "Get your free pony today!";
   const gh = "https://raw.githubusercontent.com";
   const org = "Love-and-Tolerance";
   const repo = "Love-and-Tolerance";
@@ -662,8 +664,9 @@ async function get_splash() {
   try {
       splashes = await fetch(splash_url);
       splashes = (await splashes.text()).valueOf().split("\n");
-      return splashes[Math.floor(Math.random()*splashes.length)];
+      const splash = splashes[Math.floor(Math.random()*splashes.length)]
+      return splash.includes("§") ? default_splash : splash;
   } catch (_) {
-    return "Get your free pony today!";
+    return default_splash;
   }
 }
