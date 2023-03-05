@@ -63,6 +63,8 @@ type RaceEvent = {
   condition?: (event: KeyEvent) => boolean;
 };
 
+type heading_size = 1 | 2 | 3 | 4 | 5 | 6;
+
 enum InputType {
   text = "text",
   number = "number",
@@ -624,9 +626,9 @@ function set_cmd(thing: string, value: string) {
 
 async function mane_menu() {
   const menu = create_div_element(["mane-menu", "content"]);
-  const logo = create_heading_element(name, 1, ["logo"])
+  const logo = create_heading_element(name, 1, ["logo"]);
   const splash_text = await get_splash();
-  const splash = create_paragraph_element(splash_text, ["splash"])
+  const splash = create_paragraph_element(splash_text, ["splash"]);
   menu.appendChild(logo);
   menu.appendChild(splash);
   game_content.appendChild(menu);
@@ -641,11 +643,10 @@ async function mane_menu() {
 
 function create_heading_element(
   text: string,
-  size: number,
+  size: heading_size,
   classes?: string[],
   id?: string
 ) {
-  if (size > 6 || size < 1) size = 2;
   const h = document.createElement(`h${size}`);
   h.innerText = text;
   if (classes) h.className = classes.join(" ");
@@ -662,11 +663,15 @@ async function get_splash() {
   const location = "mane/assets/minecraft/texts/splashes.txt";
   const splash_url = `${gh}/${org}/${repo}/${location}`;
   try {
-      splashes = await fetch(splash_url);
-      splashes = (await splashes.text()).valueOf().split("\n");
-      const splash = splashes[Math.floor(Math.random()*splashes.length)]
-      return splash.includes("§") ? default_splash : splash;
+    splashes = await fetch(splash_url);
+    splashes = (await splashes.text()).valueOf().split("\n");
+    const splash = splashes[Math.floor(Math.random() * splashes.length)];
+    return splash.includes("§") ? clean_splash(splash) : splash;
   } catch (_) {
     return default_splash;
   }
+}
+
+function clean_splash(splash: string) {
+  return splash.split(RegExp("§[A-Za-z0-9]")).join("");
 }
