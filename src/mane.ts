@@ -625,10 +625,18 @@ function set_cmd(thing: string, value: string) {
 async function mane_menu() {
   const menu = create_div_element(["mane-menu", "content"]);
   const logo = create_heading_element(name, 1, ["logo"])
-  const splash = await get_splash();
+  const splash_text = await get_splash();
+  const splash = create_paragraph_element(splash_text, ["splash"])
   menu.appendChild(logo);
-  menu.appendChild(create_paragraph_element(splash, ["splash"]));
+  menu.appendChild(splash);
   game_content.appendChild(menu);
+  await race_events([
+    {
+      elem: splash,
+      event: "animationend",
+    },
+  ]);
+  sleep(250);
 }
 
 function create_heading_element(

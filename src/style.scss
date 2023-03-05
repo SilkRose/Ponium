@@ -219,10 +219,16 @@ $timer-animations: (
   font-family: "Randy-GG-Regular";
   font-style: italic;
   font-size: 2em;
-  color: #ffff55;
-  background-color: black;
-  border-radius: 100vmax;
-  border: 2px solid hsl(0, 0%, 50%);
+  opacity: 0;
+  transform: translateY(2rem);
+  animation: fade-in-up 750ms ease-out 250ms forwards;
+}
+
+@keyframes fade-in-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @font-face {
