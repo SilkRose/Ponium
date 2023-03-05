@@ -673,5 +673,5 @@ async function get_splash() {
 }
 
 function clean_splash(splash: string) {
-  return splash.split(RegExp("§[A-Za-z0-9]")).join("");
+  return splash.replaceAll(/§[A-Za-z0-9]/g, "");
 }
