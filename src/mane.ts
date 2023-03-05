@@ -43,7 +43,7 @@ type Gender = typeof genders[number];
 
 type Trait = typeof traits[number];
 
-type Item = typeof items;
+type Item = typeof items[number];
 
 export type Character = {
   name: string;
@@ -51,7 +51,7 @@ export type Character = {
   species: Species;
   gender: Gender;
   traits: Trait[];
-  inventory: Item;
+  inventory: Item[];
 };
 
 type Event = HTMLElementEventMap[keyof HTMLElementEventMap];

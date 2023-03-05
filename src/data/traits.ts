@@ -5,4 +5,4 @@ export const traits = [
   "Care Taker",
   "Farmer",
   "Cool",
-];
+] as const;

@@ -11,4 +11,4 @@ export const items = [
     name: "Bit",
     value: 1,
   },
-];
+] as const;
