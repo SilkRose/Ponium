@@ -1,4 +1,6 @@
-export let pinkie_pie = {
+import { Character } from "../../mane";
+
+export let pinkie_pie: Character = {
   name: "Pinkie Pie",
   species: {
     race: "Pony",

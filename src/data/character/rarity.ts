@@ -1,4 +1,6 @@
-export let rarity = {
+import { Character } from "../../mane";
+
+export let rarity: Character = {
   name: "Rarity",
   species: {
     race: "Pony",

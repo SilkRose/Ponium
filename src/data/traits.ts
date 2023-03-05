@@ -1,4 +1,4 @@
-export let traits = [
+export const traits = [
   "Baker",
   "Fashionista",
   "Student",

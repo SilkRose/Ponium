@@ -41,13 +41,17 @@ const genders = [
 
 type Gender = typeof genders[number];
 
-type Character = {
+type Trait = typeof traits[number];
+
+type Item = typeof items;
+
+export type Character = {
   name: string;
   age: number;
   species: Species;
   gender: Gender;
-  traits: "";
-  inventory: "";
+  traits: Trait[];
+  inventory: Item;
 };
 
 type Event = HTMLElementEventMap[keyof HTMLElementEventMap];
