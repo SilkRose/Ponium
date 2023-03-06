@@ -103,20 +103,9 @@ window.onload = mane;
 async function mane() {
   set_theme_onload();
   await mane_menu();
-  let new_theme = await read_line_text(InputType.text);
-  switch (new_theme) {
-    case "light":
-      new_theme = Theme.Light;
-      break;
-    case "dark":
-      new_theme = Theme.Dark;
-      break;
-    default:
-      new_theme = Theme.Light;
-  }
-  append_element(new_theme);
-  set_theme(new_theme as Theme);
-  save_theme(new_theme as Theme);
+  await create_dual_timers(5000, "Eating pie ", 5);
+  await create_timer(2000);
+  await create_skip_timer(2000);
 }
 
 function append_element(element: string) {
