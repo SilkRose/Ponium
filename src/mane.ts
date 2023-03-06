@@ -43,7 +43,13 @@ type Gender = typeof genders[number];
 
 type Trait = typeof traits[number];
 
-type Item = typeof items[number];
+export type Item = {
+  name: string;
+  description: string;
+  value: number;
+};
+
+type Items = { [k in keyof typeof items]?: number };
 
 export type Character = {
   name: string;
@@ -51,7 +57,7 @@ export type Character = {
   species: Species;
   gender: Gender;
   traits: Trait[];
-  inventory: Item[];
+  inventory: Items;
 };
 
 type Event = HTMLElementEventMap[keyof HTMLElementEventMap];

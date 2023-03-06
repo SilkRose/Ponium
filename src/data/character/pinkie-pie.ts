@@ -9,14 +9,8 @@ export let pinkie_pie: Character = {
   gender: "Female",
   age: 21,
   traits: ["Baker"],
-  inventory: [
-    {
-      name: "Cake",
-      value: 100,
-    },
-    {
-      name: "Bit",
-      value: 1,
-    },
-  ],
+  inventory: {
+    cake: 100,
+    bit: 450,
+  },
 };
