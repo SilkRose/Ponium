@@ -1,5 +1,5 @@
 import * as characters from "./data/character/characters";
-import { traits } from "./data/traits";
+import { virtues } from "./data/virtues";
 import { items } from "./data/items";
 import * as image from "./assets";
 import { Theme, save_theme, set_theme, set_theme_onload } from "./theme";
@@ -41,7 +41,7 @@ const genders = [
 
 type Gender = typeof genders[number];
 
-type Trait = typeof traits[number];
+type Virtue = keyof typeof virtues;
 
 export type Item = {
   name: string;
@@ -56,7 +56,7 @@ export type Character = {
   age: number;
   species: Species;
   gender: Gender;
-  traits: Trait[];
+  virtue: Virtue;
   inventory: Items;
 };
 

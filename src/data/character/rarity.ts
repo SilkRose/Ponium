@@ -8,7 +8,7 @@ export let rarity: Character = {
   },
   gender: "Female",
   age: 20,
-  traits: ["Fashionista"],
+  virtue: "generosity",
   inventory: {
     hat: 1,
     bit: 1000,

@@ -8,7 +8,7 @@ export let pinkie_pie: Character = {
   },
   gender: "Female",
   age: 21,
-  traits: ["Baker"],
+  virtue: "laughter",
   inventory: {
     cake: 100,
     bit: 450,
