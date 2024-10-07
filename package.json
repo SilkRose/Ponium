@@ -1,37 +1,37 @@
 {
-  "name": "libre-pony",
-  "version": "0.0.1",
-  "description": "Get your free pony today!",
-  "private": true,
-  "packageManager": "pnpm@7.28.0",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-	 "pfmt": "prettier . --use-tabs --write"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SilkRose/LibrePony.git"
-  },
-  "contributors": [
-    "Silk Rose",
-    "Meadowsys"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/SilkRose/LibrePony/issues"
-  },
-  "homepage": "https://github.com/SilkRose/LibrePony#readme",
-  "devDependencies": {
-    "@total-typescript/ts-reset": "^0.3.7",
-    "@types/node": "^18.14.6",
-    "sass": "^1.58.3",
-    "sharp": "^0.31.3",
-    "terser": "^5.16.5",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.4",
-    "vite-plugin-html": "^3.2.0",
-    "vite-plugin-image-optimizer": "^1.1.0"
-  }
+	"name": "libre-pony",
+	"version": "0.0.1",
+	"description": "Get your free pony today!",
+	"private": true,
+	"packageManager": "pnpm@7.28.0",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"pfmt": "prettier . --use-tabs --write"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SilkRose/LibrePony.git"
+	},
+	"contributors": [
+		"Silk Rose",
+		"Meadowsys"
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/SilkRose/LibrePony/issues"
+	},
+	"homepage": "https://github.com/SilkRose/LibrePony#readme",
+	"devDependencies": {
+		"@total-typescript/ts-reset": "^0.3.7",
+		"@types/node": "^18.14.6",
+		"sass": "^1.58.3",
+		"sharp": "^0.31.3",
+		"terser": "^5.16.5",
+		"typescript": "^4.9.5",
+		"vite": "^4.1.4",
+		"vite-plugin-html": "^3.2.0",
+		"vite-plugin-image-optimizer": "^1.1.0"
+	}
 }

@@ -1,149 +1,149 @@
 * {
-  color: var(--text);
+	color: var(--text);
 }
 
 body {
-  background-color: var(--background);
-  /* Sparkle */
-  background-image: conic-gradient(
-    from 290deg at 50% 150%,
-    #cc9cdf,
-    #a46bbd,
-    #cc9cdf
-  );
-  /* Balloon */
-  background-image: conic-gradient(
-    from 290deg at 50% 150%,
-    #f5b8d0,
-    #e882b2,
-    #f5b7d0
-  );
-  /* Gem */
-  background-image: conic-gradient(
-    from 290deg at 50% 150%,
-    #eaeef0,
-    #bdc1c2,
-    #eaeef0
-  );
-  /* Apple */
-  background-image: conic-gradient(
-    from 290deg at 50% 150%,
-    #faba62,
-    #ef6f2f,
-    #faba62
-  );
-  /* Lightning */
-  background-image: conic-gradient(
-    from 290deg at 50% 150%,
-    #9bdbf5,
-    #6babda,
-    #9bdbf5
-  );
-  /* Butterfly */
-  background-image: conic-gradient(
-    from 290deg at 50% 150%,
-    #faf5ab,
-    #e9d461,
-    #faf5ab
-  );
-  background-image: none;
+	background-color: var(--background);
+	/* Sparkle */
+	background-image: conic-gradient(
+		from 290deg at 50% 150%,
+		#cc9cdf,
+		#a46bbd,
+		#cc9cdf
+	);
+	/* Balloon */
+	background-image: conic-gradient(
+		from 290deg at 50% 150%,
+		#f5b8d0,
+		#e882b2,
+		#f5b7d0
+	);
+	/* Gem */
+	background-image: conic-gradient(
+		from 290deg at 50% 150%,
+		#eaeef0,
+		#bdc1c2,
+		#eaeef0
+	);
+	/* Apple */
+	background-image: conic-gradient(
+		from 290deg at 50% 150%,
+		#faba62,
+		#ef6f2f,
+		#faba62
+	);
+	/* Lightning */
+	background-image: conic-gradient(
+		from 290deg at 50% 150%,
+		#9bdbf5,
+		#6babda,
+		#9bdbf5
+	);
+	/* Butterfly */
+	background-image: conic-gradient(
+		from 290deg at 50% 150%,
+		#faf5ab,
+		#e9d461,
+		#faf5ab
+	);
+	background-image: none;
 }
 
 #game-content {
-  box-shadow: 0px 0px 14px var(--shadow);
-  background-color: var(--foreground);
+	box-shadow: 0px 0px 14px var(--shadow);
+	background-color: var(--foreground);
 }
 
 #input_field input {
-  background-color: var(--input_background);
-  border-color: var(--border);
+	background-color: var(--input_background);
+	border-color: var(--border);
 }
 
 #input_radial {
-  input[type="radio"] {
-    :hover {
-      accent-color: var(--mane_accent_inactive);
-    }
-    :active,
-    :checked,
-    :checked:focus {
-      accent-color: var(--mane_accent_active);
-    }
-    label {
-      :has(input[type="radio"]:checked:focus) {
-        text-decoration-color: var(--mane_accent_active);
-      }
-      :has(input[type="radio"]:hover),
-      :has(input[type="radio"]:checked) {
-        border-color: var(--border);
-        text-decoration-color: var(--mane_accent_inactive);
-      }
-    }
-  }
+	input[type="radio"] {
+		:hover {
+			accent-color: var(--mane_accent_inactive);
+		}
+		:active,
+		:checked,
+		:checked:focus {
+			accent-color: var(--mane_accent_active);
+		}
+		label {
+			:has(input[type="radio"]:checked:focus) {
+				text-decoration-color: var(--mane_accent_active);
+			}
+			:has(input[type="radio"]:hover),
+			:has(input[type="radio"]:checked) {
+				border-color: var(--border);
+				text-decoration-color: var(--mane_accent_inactive);
+			}
+		}
+	}
 }
 
 #input_radial,
 #input_field {
-  input:focus {
-    border-color: var(--mane_accent_active);
-  }
-  button {
-    background-color: var(--button_background);
-    border-color: var(--border);
-    :hover,
-    :focus {
-      background-color: var(--button_hover_background);
-      border-color: var(--mane_accent_active);
-    }
-  }
+	input:focus {
+		border-color: var(--mane_accent_active);
+	}
+	button {
+		background-color: var(--button_background);
+		border-color: var(--border);
+		:hover,
+		:focus {
+			background-color: var(--button_hover_background);
+			border-color: var(--mane_accent_active);
+		}
+	}
 }
 
 ::placeholder {
-  color: var(--placeholder);
+	color: var(--placeholder);
 }
 
 @mixin theme-light {
-  --text: #000;
-  --background: #f2f2f2;
-  --foreground: #fff;
-  --shadow: #ccc;
-  --border: #a5a5a5;
-  --placeholder: #555;
-  --input_background: #f2f2f2;
-  --button_background: #e9e9ed;
-  --button_hover_background: #d0d0d7;
-  --mane_accent_inactive: #a5a5a5;
-  --mane_accent_active: #eb458b;
+	--text: #000;
+	--background: #f2f2f2;
+	--foreground: #fff;
+	--shadow: #ccc;
+	--border: #a5a5a5;
+	--placeholder: #555;
+	--input_background: #f2f2f2;
+	--button_background: #e9e9ed;
+	--button_hover_background: #d0d0d7;
+	--mane_accent_inactive: #a5a5a5;
+	--mane_accent_active: #eb458b;
 }
 
 @mixin theme-dark {
-  --text: #fff;
-  --background: #000;
-  --foreground: #0d0d0d;
-  --shadow: #444;
-  --border: #5a5a5a;
-  --placeholder: #aaaaaa;
-  --input_background: #0d0d0d;
-  --button_background: #161612;
-  --button_hover_background: #2f2f28;
-  --mane_accent_inactive: #5a5a5a;
-  --mane_accent_active: #14ba74;
+	--text: #fff;
+	--background: #000;
+	--foreground: #0d0d0d;
+	--shadow: #444;
+	--border: #5a5a5a;
+	--placeholder: #aaaaaa;
+	--input_background: #0d0d0d;
+	--button_background: #161612;
+	--button_hover_background: #2f2f28;
+	--mane_accent_inactive: #5a5a5a;
+	--mane_accent_active: #14ba74;
 }
 
 :root {
-  @include theme-light();
+	@include theme-light();
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    @include theme-dark();
-  }
+	:root {
+		@include theme-dark();
+	}
 }
 
 .theme-light {
-  @include theme-light();
+	@include theme-light();
 }
 
 .theme-dark {
-  @include theme-dark();
+	@include theme-dark();
 }

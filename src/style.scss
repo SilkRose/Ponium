@@ -1,243 +1,243 @@
 @use "./theme.scss";
 
 :root {
-  --timer_duration: 0ms;
-  --sub_timer_duration: 0ms;
-  --sub_timer_count: 0;
+	--timer_duration: 0ms;
+	--sub_timer_duration: 0ms;
+	--sub_timer_count: 0;
 }
 
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, sans-serif;
+	font-family: Arial, sans-serif;
 }
 
 main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
 }
 
 #game-content {
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
-  border-radius: 10px;
-  text-align: center;
-  overflow: auto;
-  > :first-child {
-    padding-top: 0;
-  }
-  > :last-child {
-    padding-bottom: 0;
-  }
-  @media (max-width: 450px) {
-    padding: 1rem;
-  }
+	max-width: 900px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 2rem;
+	border-radius: 10px;
+	text-align: center;
+	overflow: auto;
+	> :first-child {
+		padding-top: 0;
+	}
+	> :last-child {
+		padding-bottom: 0;
+	}
+	@media (max-width: 450px) {
+		padding: 1rem;
+	}
 }
 
 .content {
-  padding: 0.5rem 0rem;
-  animation: fade 250ms ease-in;
-  @media (max-width: 450px) {
-    padding: 0.25rem 0;
-  }
+	padding: 0.5rem 0rem;
+	animation: fade 250ms ease-in;
+	@media (max-width: 450px) {
+		padding: 0.25rem 0;
+	}
 }
 
 @keyframes fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 
 #input_field {
-  display: flex;
-  gap: 0.5rem;
-  input {
-    flex-grow: 1;
-    min-height: 2.25rem;
-    outline: transparent;
-    border-style: solid;
-    border-width: 0.15rem;
-    border-radius: 0;
-    border-top: transparent;
-    border-left: transparent;
-    border-right: transparent;
-    padding: 0.5rem;
-  }
+	display: flex;
+	gap: 0.5rem;
+	input {
+		flex-grow: 1;
+		min-height: 2.25rem;
+		outline: transparent;
+		border-style: solid;
+		border-width: 0.15rem;
+		border-radius: 0;
+		border-top: transparent;
+		border-left: transparent;
+		border-right: transparent;
+		padding: 0.5rem;
+	}
 }
 
 @mixin flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	align-items: center;
+	justify-content: center;
 }
 
 #input_radial {
-  @include flex();
-  input {
-    outline: transparent;
-    margin-right: 0.5rem;
-  }
-  label:has(input[type="radio"]:hover),
-  label:has(input[type="radio"]:checked) {
-    text-decoration: underline;
-    text-decoration-thickness: 0.15rem;
-    text-underline-offset: 0.25rem;
-  }
+	@include flex();
+	input {
+		outline: transparent;
+		margin-right: 0.5rem;
+	}
+	label:has(input[type="radio"]:hover),
+	label:has(input[type="radio"]:checked) {
+		text-decoration: underline;
+		text-decoration-thickness: 0.15rem;
+		text-underline-offset: 0.25rem;
+	}
 }
 
 #input_radial,
 #input_field {
-  button {
-    outline: transparent;
-    border-style: solid;
-    border-radius: 0;
-    padding: 0.5rem;
-  }
+	button {
+		outline: transparent;
+		border-style: solid;
+		border-radius: 0;
+		padding: 0.5rem;
+	}
 }
 
 ::placeholder {
-  font-style: italic;
-  opacity: 1; // Set opacity for Firefox.
+	font-style: italic;
+	opacity: 1; // Set opacity for Firefox.
 }
 
 .pixelated {
-  image-rendering: pixelated;
+	image-rendering: pixelated;
 }
 
 .timer {
-  position: relative;
-  padding: 0;
-  animation: fade 150ms ease-in-out;
-  > img {
-    display: block;
-  }
-  &-background {
-    position: relative;
-    width: 100%;
-  }
-  &-foreground {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    animation-timing-function: linear;
-    animation-duration: var(--timer_duration);
-  }
-  &-left-to-right {
-    animation-name: left-to-right-progress-bar;
-    animation-timing-function: steps(19, jump-none);
-  }
-  &-sides-to-center {
-    animation-name: sides-to-center-progress-bar;
-    animation-timing-function: steps(10, jump-none);
-  }
-  &-skip-text {
-    padding-bottom: 0.75rem;
-  }
-  &-dual-spacing {
-    height: 1rem;
-  }
-  &-sub-div {
-    @include flex();
-    justify-content: right;
-    > .timer {
-      width: 50%;
-    }
-  }
-  &-sub-left-to-right {
-    animation-name: left-to-right-progress-bar;
-    animation-timing-function: steps(10, jump-none);
-    animation-iteration-count: var(--sub_timer_count);
-    animation-duration: var(--sub_timer_duration);
-  }
-  @media (max-width: 450px) {
-    &-dual-spacing {
-      height: 0.75rem;
-    }
-    &-sub-div {
-      justify-content: center;
-      > .timer {
-        width: 100%;
-      }
-    }
-    &-left-to-right {
-      animation-timing-function: steps(10, jump-none);
-    }
-    &-background:not(.timer-sub, .timer-skip) {
-      content: url("./assets/images/small-timer-filled.png");
-    }
-    &-foreground:not(.timer-sub, .timer-skip) {
-      content: url("./assets/images/small-timer-unfilled.png");
-    }
-    &-sides-to-center {
-      animation-timing-function: steps(5, jump-none);
-    }
-    &-skip.timer-background {
-      content: url("./assets/images/small-skip-timer-unfilled.png");
-    }
-    &-skip.timer-foreground {
-      content: url("./assets/images/small-skip-timer-filled.png");
-    }
-  }
+	position: relative;
+	padding: 0;
+	animation: fade 150ms ease-in-out;
+	> img {
+		display: block;
+	}
+	&-background {
+		position: relative;
+		width: 100%;
+	}
+	&-foreground {
+		position: absolute;
+		width: 100%;
+		top: 0;
+		left: 0;
+		animation-timing-function: linear;
+		animation-duration: var(--timer_duration);
+	}
+	&-left-to-right {
+		animation-name: left-to-right-progress-bar;
+		animation-timing-function: steps(19, jump-none);
+	}
+	&-sides-to-center {
+		animation-name: sides-to-center-progress-bar;
+		animation-timing-function: steps(10, jump-none);
+	}
+	&-skip-text {
+		padding-bottom: 0.75rem;
+	}
+	&-dual-spacing {
+		height: 1rem;
+	}
+	&-sub-div {
+		@include flex();
+		justify-content: right;
+		> .timer {
+			width: 50%;
+		}
+	}
+	&-sub-left-to-right {
+		animation-name: left-to-right-progress-bar;
+		animation-timing-function: steps(10, jump-none);
+		animation-iteration-count: var(--sub_timer_count);
+		animation-duration: var(--sub_timer_duration);
+	}
+	@media (max-width: 450px) {
+		&-dual-spacing {
+			height: 0.75rem;
+		}
+		&-sub-div {
+			justify-content: center;
+			> .timer {
+				width: 100%;
+			}
+		}
+		&-left-to-right {
+			animation-timing-function: steps(10, jump-none);
+		}
+		&-background:not(.timer-sub, .timer-skip) {
+			content: url("./assets/images/small-timer-filled.png");
+		}
+		&-foreground:not(.timer-sub, .timer-skip) {
+			content: url("./assets/images/small-timer-unfilled.png");
+		}
+		&-sides-to-center {
+			animation-timing-function: steps(5, jump-none);
+		}
+		&-skip.timer-background {
+			content: url("./assets/images/small-skip-timer-unfilled.png");
+		}
+		&-skip.timer-foreground {
+			content: url("./assets/images/small-skip-timer-filled.png");
+		}
+	}
 }
 
 $timer-animations: (
-  left-to-right-progress-bar: 0 0 0 100%,
-  sides-to-center-progress-bar: 0 50% 0 50%,
+	left-to-right-progress-bar: 0 0 0 100%,
+	sides-to-center-progress-bar: 0 50% 0 50%,
 );
 
 @each $name, $inset in $timer-animations {
-  @keyframes #{$name} {
-    from {
-      clip-path: inset(0 0 0 0);
-    }
-    to {
-      clip-path: inset($inset);
-    }
-  }
+	@keyframes #{$name} {
+		from {
+			clip-path: inset(0 0 0 0);
+		}
+		to {
+			clip-path: inset($inset);
+		}
+	}
 }
 
 .logo {
-  font-family: "Randy-GG-Bold";
-  font-size: 4em;
+	font-family: "Randy-GG-Bold";
+	font-size: 4em;
 }
 
 .splash {
-  font-family: "Randy-GG-Regular";
-  font-style: italic;
-  font-size: 2em;
-  opacity: 0;
-  transform: translateY(2rem);
-  animation: fade-in-up 750ms ease-out 250ms forwards;
+	font-family: "Randy-GG-Regular";
+	font-style: italic;
+	font-size: 2em;
+	opacity: 0;
+	transform: translateY(2rem);
+	animation: fade-in-up 750ms ease-out 250ms forwards;
 }
 
 @keyframes fade-in-up {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @font-face {
-  font-family: "Randy-GG-Bold";
-  src: url("./assets/fonts/RandyGG_Font/RandyGGBold.ttf");
+	font-family: "Randy-GG-Bold";
+	src: url("./assets/fonts/RandyGG_Font/RandyGGBold.ttf");
 }
 
 @font-face {
-  font-family: "Randy-GG-Regular";
-  src: url("./assets/fonts/RandyGG_Font/RandyGGRegular.ttf");
+	font-family: "Randy-GG-Regular";
+	src: url("./assets/fonts/RandyGG_Font/RandyGGRegular.ttf");
 }
