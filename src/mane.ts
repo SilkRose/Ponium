@@ -103,6 +103,19 @@ window.onload = mane;
 async function mane() {
   set_theme_onload();
   await mane_menu();
+  const cmd = await read_line_text(InputType.text);
+  await command_parser(cmd);
+  const test_data = characters.pinkie_pie;
+  append_element(JSON.stringify(test_data));
+  let player = await create_character();
+  append_element(player.name);
+  append_element(player.age.toString());
+  append_element(player.species.race.toString());
+  if (player.species.race === "Pony") {
+    append_element(player.species.sub_race.toString());
+  }
+  append_element(player.gender);
+  await get_best_pony();
   await create_dual_timers(5000, "Eating pie ", 5);
   await create_timer(2000);
   await create_skip_timer(2000);
