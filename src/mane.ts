@@ -626,9 +626,11 @@ function set_cmd(thing: string, value: string) {
 			switch (value) {
 				case "light":
 					set_theme(Theme.Light);
+					save_theme(Theme.Light);
 					break;
 				case "dark":
 					set_theme(Theme.Dark);
+					save_theme(Theme.Dark);
 					break;
 			}
 		}
